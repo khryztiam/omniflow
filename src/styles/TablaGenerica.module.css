@@ -1,0 +1,170 @@
+.contenedorTabla {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tabla thead {
+  background:
+    linear-gradient(90deg, rgba(14, 165, 233, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+  border-bottom: 1px solid #d4e1ee;
+}
+
+.tabla th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 800;
+  color: #1e3a5f;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.7px;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+}
+
+.sortButtonActive {
+  color: #0f4c81;
+}
+
+.sortIcon {
+  color: #7b91aa;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.sortButtonActive .sortIcon {
+  color: #2563eb;
+}
+
+.tabla td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #1f2937;
+}
+
+.tabla tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.tabla tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.acciones {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-color: #9ca3af;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn.danger {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.btn.danger:hover {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.btn.warning {
+  color: #d97706;
+  border-color: #fcd34d;
+}
+
+.btn.warning:hover {
+  background-color: #fef3c7;
+  border-color: #fbbf24;
+}
+
+.btn.success {
+  color: #059669;
+  border-color: #a7f3d0;
+}
+
+.btn.success:hover {
+  background-color: #d1fae5;
+  border-color: #6ee7b7;
+}
+
+.btn.info {
+  color: #0891b2;
+  border-color: #a5f3fc;
+}
+
+.btn.info:hover {
+  background-color: #cffafe;
+  border-color: #67e8f9;
+}
+
+.cargando,
+.vacio {
+  background: white;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .tabla {
+    font-size: 12px;
+  }
+
+  .tabla th,
+  .tabla td {
+    padding: 10px 8px;
+  }
+
+  .acciones {
+    gap: 4px;
+  }
+
+  .btn {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}

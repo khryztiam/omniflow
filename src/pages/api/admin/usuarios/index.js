@@ -1,0 +1,127 @@
+import {
+  verifyAdminOrSupervisorToken,
+  verifyAdminToken,
+  supabaseAdmin,
+} from '@lib/apiHelpers';
+
+export default async function handler(req, res) {
+  const authHeader = req.headers.authorization;
+  const verify =
+    req.method === 'GET'
+      ? await verifyAdminOrSupervisorToken(authHeader)
+      : await verifyAdminToken(authHeader);
+
+  if (!verify.isValid) {
+    return res.status(403).json({ error: 'Forbidden', detail: verify.reason });
+  }
+
+  try {
+    if (req.method === 'POST') {
+      const {
+        nombre_completo,
+        email,
+        rol_id,
+        local_id,
+        departamento_id,
+        password,
+      } = req.body;
+
+      if (!nombre_completo || !email || !rol_id) {
+        return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      // 1. Crear usuario en Auth
+      const { data: authData, error: authError } =
+        await supabaseAdmin.auth.admin.createUser({
+          email,
+          password: password || Math.random().toString(36).slice(-12),
+          user_metadata: { nombre_completo },
+          email_confirm: true, // Auto-confirmar email
+        });
+
+      if (authError) {
+        return res.status(400).json({
+          error: 'AUTH_ERROR',
+          detail: authError.message,
+        });
+      }
+
+      // 2. Insertar en tabla usuarios (sin username)
+      const { error: dbError } = await supabaseAdmin.from('usuarios').insert({
+        id: authData.user.id,
+        email,
+        nombre_completo,
+        rol_id,
+        local_id: local_id || null,
+        departamento_id: departamento_id || null,
+        estado: 'activo',
+      });
+
+      if (dbError) {
+        // Rollback: eliminar de Auth si falla la BD
+        await supabaseAdmin.auth.admin.deleteUser(authData.user.id);
+        return res.status(400).json({
+          error: 'DB_ERROR',
+          detail: dbError.message,
+        });
+      }
+
+      return res.status(201).json({
+        success: true,
+        data: authData.user,
+      });
+    }
+
+    if (req.method === 'GET') {
+      if (verify.rol === 'supervisor') {
+        // Supervisor ve solo sus usuarios y usuarios sin asignar
+        // Filtro: (supervisor_id = auth.uid() OR supervisor_id IS NULL)
+        // Y deben ser role = 'user'
+        const { data, error } = await supabaseAdmin
+          .from('usuarios')
+          .select(
+            `
+            *,
+            rol:roles!inner(id, nombre),
+            local:locales!inner(id, nombre, pais_id, pais:paises(id, nombre)),
+            departamento:departamentos!usuarios_departamento_id_fkey(id, nombre)
+          `
+          )
+          .eq('rol.nombre', 'user')
+          .neq('id', verify.userId)
+          .or(`supervisor_id.eq.${verify.userId},supervisor_id.is.null`)
+          .order('nombre_completo', { ascending: true });
+
+        if (error) {
+          return res.status(400).json({ error: error.message });
+        }
+
+        return res.status(200).json({ data });
+      }
+
+      // Admin ve todos los usuarios
+      const { data, error } = await supabaseAdmin
+        .from('usuarios')
+        .select(
+          `
+          *,
+          rol:roles(id, nombre),
+          local:locales(id, nombre, pais_id, pais:paises(id, nombre)),
+          departamento:departamentos!usuarios_departamento_id_fkey(id, nombre)
+        `
+        )
+        .order('nombre_completo', { ascending: true });
+
+      if (error) {
+        return res.status(400).json({ error: error.message });
+      }
+
+      return res.status(200).json({ data });
+    }
+
+    res.setHeader('Allow', ['POST', 'GET']);
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error', detail: err.message });
+  }
+}

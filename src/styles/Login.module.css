@@ -1,0 +1,237 @@
+.contenedor {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top left, rgba(96, 165, 250, 0.32), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.2), transparent 22%),
+    linear-gradient(135deg, #0f172a 0%, #1e3a8a 58%, #2563eb 100%);
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Source Sans Pro', sans-serif;
+  padding: 16px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 28px;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.3);
+  width: 100%;
+  max-width: 440px;
+  padding: 40px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+.logoArea {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.logoBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 32px;
+  background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 18px 34px rgba(37, 99, 235, 0.18);
+}
+
+.logoSvg {
+  display: block;
+}
+
+.nombre {
+  font-size: 40px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+
+.nombreOmni {
+  color: #1e3a8a;
+}
+
+.nombreFlow {
+  color: #3b82f6;
+}
+
+.subtitulo {
+  color: #64748b;
+  font-size: 14px;
+  margin: -2px 0 0;
+  font-weight: 600;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 50%;
+  min-width: 220px;
+  align-self: center;
+}
+
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.inputConIcono {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 16px;
+  border: 1px solid #dbe4f0;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.inputConIcono:focus-within {
+  border-color: #3b82f6;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
+
+.icono {
+  width: 20px;
+  height: 20px;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.entrada {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 15px;
+  color: #1e293b;
+  font-family: inherit;
+  min-width: 0;
+}
+
+.entrada::placeholder {
+  color: #94a3b8;
+}
+
+.entrada:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dominio {
+  display: none;
+}
+
+.mensaje {
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.boton {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.24s ease;
+  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.28);
+  margin-top: 6px;
+}
+
+.boton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px rgba(37, 99, 235, 0.36);
+}
+
+.boton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer {
+  text-align: center;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+  width: 50%;
+  min-width: 220px;
+  align-self: center;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 32px 20px 24px;
+    gap: 24px;
+    border-radius: 22px;
+  }
+
+  .logoBadge {
+    width: 94px;
+    height: 94px;
+    border-radius: 26px;
+  }
+
+  .logoSvg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .nombre {
+    font-size: 34px;
+  }
+
+  .entrada {
+    font-size: 16px;
+  }
+
+  .formulario,
+  .footer {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .boton,
+  .inputConIcono {
+    transition: none;
+  }
+}
