@@ -1,6 +1,6 @@
 import Layout from '@components/Layout';
 import { useAdmin } from '@hooks/useProtegerRuta';
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import TablaGenerica from '@components/TablaGenerica';
 import Modal from '@components/Modal';
 import FormularioMulti from '@components/FormularioMulti';
@@ -24,7 +24,6 @@ import styles from '@styles/TareasAdmin.module.css';
 
 export default function TareasAdmin() {
   const { cargando: cargandoAuth } = useAdmin();
-  const montadoRef = useRef(true);
   const [tareas, setTareas] = useState([]);
   const [locales, setLocales] = useState([]);
   const [prioridades, setPrioridades] = useState([]);
@@ -32,6 +31,7 @@ export default function TareasAdmin() {
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
+  const [errorCatalogos, setErrorCatalogos] = useState('');
   const [filtroLocal, setFiltroLocal] = useState('todas');
   const [fechaDesde, setFechaDesde] = useState('');
   const [fechaHasta, setFechaHasta] = useState('');
@@ -68,16 +68,6 @@ export default function TareasAdmin() {
     fecha_limite: '',
   });
 
-  useEffect(() => {
-    montadoRef.current = true;
-    if (!cargandoAuth) {
-      cargarDatos();
-    }
-    return () => {
-      montadoRef.current = false;
-    };
-  }, [cargandoAuth]);
-
   const resumirResponsable = (nombre) => {
     if (!nombre) return 'Sin asignar';
 
@@ -88,15 +78,15 @@ export default function TareasAdmin() {
   };
 
   // Obtener token del usuario actual
-  const obtenerToken = async () => {
+  const obtenerToken = useCallback(async () => {
     const { data, error } = await supabase.auth.getSession();
     if (error || !data?.session?.access_token) {
       throw new Error('No autenticado');
     }
     return data.session.access_token;
-  };
+  }, []);
 
-  const callAPI = async (url, method = 'GET', body = null) => {
+  const callAPI = useCallback(async (url, method = 'GET', body = null) => {
     const token = await obtenerToken();
     const response = await fetch(url, {
       method,
@@ -113,39 +103,81 @@ export default function TareasAdmin() {
     }
 
     return response.json();
-  };
+  }, [obtenerToken]);
 
-  const cargarDatos = async () => {
-    try {
-      if (montadoRef.current) setCargando(true);
-      setError('');
+  useEffect(() => {
+    let activo = true;
 
-      // Cargar datos desde APIs
-      const [localesRes, prioridadesRes, estadosRes, tareasRes, usuariosRes] =
-        await Promise.all([
-          supabase.from('locales').select('id, nombre'),
-          supabase.from('prioridades').select('id, nombre'),
-          supabase.from('estados_tarea').select('id, nombre'),
-          callAPI('/api/admin/tareas'),
-          supabase
-            .from('usuarios')
-            .select('id, nombre_completo, rol:roles(nombre), local:locales(nombre)')
-            .eq('estado', 'activo'),
-        ]);
+    if (!cargandoAuth) {
+      const cargarDatos = async () => {
+        try {
+          const [
+            localesRes,
+            prioridadesRes,
+            estadosRes,
+            tareasRes,
+            usuariosRes,
+          ] = await Promise.all([
+            supabase.from('locales').select('id, nombre'),
+            supabase.from('prioridades').select('id, nombre'),
+            supabase.from('estados_tarea').select('id, nombre'),
+            callAPI('/api/admin/tareas'),
+            supabase
+              .from('usuarios')
+              .select(
+                'id, nombre_completo, rol:roles(nombre), local:locales(nombre)'
+              )
+              .eq('estado', 'activo'),
+          ]);
 
-      if (montadoRef.current) {
-        setLocales(localesRes.data || []);
-        setPrioridades(prioridadesRes.data || []);
-        setEstados(estadosRes.data || []);
-        setTareas(tareasRes || []);
-        setUsuarios(usuariosRes.data || []);
-      }
-    } catch (err) {
-      if (montadoRef.current) setError(`Error cargando datos: ${err.message}`);
-    } finally {
-      if (montadoRef.current) setCargando(false);
+          if (!activo) return;
+
+          const erroresCatalogos = [
+            prioridadesRes.error &&
+              `prioridades: ${prioridadesRes.error.message}`,
+            estadosRes.error && `estados: ${estadosRes.error.message}`,
+          ].filter(Boolean);
+
+          if (erroresCatalogos.length) {
+            const mensaje = `No se pudieron cargar las opciones de ${erroresCatalogos.join('; ')}.`;
+            setErrorCatalogos(mensaje);
+            throw new Error(mensaje);
+          }
+
+          if (localesRes.error || usuariosRes.error) {
+            throw localesRes.error || usuariosRes.error;
+          }
+
+          setError('');
+          setLocales(localesRes.data || []);
+          setPrioridades(prioridadesRes.data || []);
+          setEstados(estadosRes.data || []);
+          setTareas(tareasRes || []);
+          setUsuarios(usuariosRes.data || []);
+
+          const catalogosVacios = [
+            !prioridadesRes.data?.length && 'prioridades',
+            !estadosRes.data?.length && 'estados de tarea',
+          ].filter(Boolean);
+          setErrorCatalogos(
+            catalogosVacios.length
+              ? `No hay opciones registradas en ${catalogosVacios.join(' y ')}. Configura esos catálogos en Supabase para poder crear tareas.`
+              : ''
+          );
+        } catch (err) {
+          if (activo) setError(`Error cargando datos: ${err.message}`);
+        } finally {
+          if (activo) setCargando(false);
+        }
+      };
+
+      cargarDatos();
     }
-  };
+
+    return () => {
+      activo = false;
+    };
+  }, [cargandoAuth, callAPI]);
 
   const tareasFiltradas = tareas.filter((tarea) => {
     const cumpleLocal =
@@ -268,6 +300,7 @@ export default function TareasAdmin() {
   const handleNuevaTarea = () => {
     setModo('crear');
     setTareaEditando(null);
+    setError('');
     setValores({
       titulo: '',
       descripcion: '',
@@ -319,6 +352,7 @@ export default function TareasAdmin() {
   const handleEditar = (tarea) => {
     setModo('editar');
     setTareaEditando(tarea);
+    setError('');
     setValores({
       titulo: tarea.titulo || '',
       descripcion: tarea.descripcion || '',
@@ -344,6 +378,9 @@ export default function TareasAdmin() {
         !valores.local_id ||
         !valores.estado_id
       ) {
+        if (errorCatalogos) {
+          throw new Error(errorCatalogos);
+        }
         throw new Error('Completa los campos requeridos');
       }
 
@@ -629,7 +666,9 @@ export default function TareasAdmin() {
       </div>
 
       <div className={styles.contenedor}>
-        {error && <div className={styles.error}>{error}</div>}
+        {!modalAbierta && (error || errorCatalogos) && (
+          <div className={styles.error}>{error || errorCatalogos}</div>
+        )}
 
         <TablaGenerica
           columnas={columnasTabla}
@@ -647,9 +686,11 @@ export default function TareasAdmin() {
         onAceptar={handleGuardar}
         cargando={cargandoFormulario}
         modo={modo}
+        cerrarAlHacerClickFuera={false}
       >
         <FormularioMulti
           modo={modo}
+          error={error || errorCatalogos}
           campos={[
             {
               name: 'titulo',
@@ -677,6 +718,7 @@ export default function TareasAdmin() {
               label: 'Prioridad',
               type: 'select',
               options: prioridades.map((p) => ({ id: p.id, label: p.nombre })),
+              emptyLabel: 'No hay prioridades configuradas',
               required: true,
               mostrarEn: ['crear', 'editar'],
             },
@@ -685,6 +727,7 @@ export default function TareasAdmin() {
               label: 'Estado',
               type: 'select',
               options: estados.map((e) => ({ id: e.id, label: e.nombre })),
+              emptyLabel: 'No hay estados configurados',
               required: true,
               mostrarEn: ['crear', 'editar'],
             },

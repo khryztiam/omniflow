@@ -82,12 +82,20 @@ export default function FormularioMulti({
                   className={styles.select}
                   required={campo.required && esEditando}
                 >
-                  <option value="">-- Seleccionar --</option>
-                  {campo.options?.map((opt) => (
-                    <option key={opt.id} value={opt.id}>
-                      {opt.label}
+                  {campo.options?.length ? (
+                    <>
+                      <option value="">-- Seleccionar --</option>
+                      {campo.options.map((opt) => (
+                        <option key={opt.id} value={opt.id}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </>
+                  ) : (
+                    <option value="" disabled>
+                      {campo.emptyLabel || 'No hay opciones disponibles'}
                     </option>
-                  ))}
+                  )}
                 </select>
               ) : campo.type === 'checkbox-group' ? (
                 <div className={styles.opcionesCheckbox}>

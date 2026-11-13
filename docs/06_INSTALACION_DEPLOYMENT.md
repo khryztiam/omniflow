@@ -373,19 +373,19 @@ INSERT INTO roles (nombre, descripcion) VALUES
   ('user', 'Usuario operario');
 
 -- Insertar prioridades
-INSERT INTO prioridades (nombre) VALUES
-  ('Baja'),
-  ('Media'),
-  ('Alta'),
-  ('Urgente');
+INSERT INTO prioridades (nombre, orden, color_hex) VALUES
+  ('baja', 1, '#4CAF50'),
+  ('media', 2, '#FFC107'),
+  ('alta', 3, '#FF9800'),
+  ('urgente', 4, '#F44336');
 
 -- Insertar estados
 INSERT INTO estados_tarea (nombre, color_hex) VALUES
-  ('Pendiente', '#FF6B6B'),
-  ('En Proceso', '#FFD93D'),
-  ('Completada', '#6BCB77'),
-  ('Pausada', '#4D96FF'),
-  ('Cancelada', '#CCCCCC');
+  ('pendiente', '#FFC107'),
+  ('en_proceso', '#2196F3'),
+  ('en_revision', '#FF9800'),
+  ('completado', '#4CAF50'),
+  ('detenido', '#F44336');
 
 -- Insertar país (ejemplo)
 INSERT INTO paises (nombre) VALUES

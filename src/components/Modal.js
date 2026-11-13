@@ -23,6 +23,7 @@ export default function Modal({
   textoCancel = 'Cancelar',
   textoAceptar,
   tamano = 'md',
+  cerrarAlHacerClickFuera = true,
 }) {
   // Cerrar con ESC
   useEffect(() => {
@@ -47,7 +48,10 @@ export default function Modal({
     tamano === 'lg' ? styles.contenedorLg : styles.contenedorMd;
 
   return (
-    <div className={styles.overlay} onClick={onCerrar}>
+    <div
+      className={styles.overlay}
+      onClick={cerrarAlHacerClickFuera ? onCerrar : undefined}
+    >
       <div
         className={`${styles.contenedor} ${claseTamano}`}
         onClick={(e) => e.stopPropagation()}

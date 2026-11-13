@@ -72,12 +72,17 @@ se conserva para validar que el departamento este habilitado para el local.
 La relacion directa permite a PostgREST resolver el departamento en las
 consultas de perfiles; esas consultas identifican explicitamente esta FK.
 
-Ambas migraciones se aplicaron mediante Supabase MCP al proyecto `Tarea Final
-Kodigo` (`cqqcyqfmjphvdusgxbaq`) el 11 de noviembre de 2026. La validacion
-posterior confirmo 12 tablas publicas y 40 politicas RLS. El catalogo de
-departamentos, las asociaciones con locales y las asignaciones departamentales
-de usuarios quedaron vacios; los cinco perfiles existentes no fueron
-modificados.
+`20261112_seed_catalogos_tareas.sql` agrega de forma idempotente los estados y
+prioridades que utiliza la aplicacion cuando esos registros no existen. Puede
+ejecutarse en una instalacion nueva o en una base existente desde el SQL Editor
+de Supabase o con `psql`.
+
+Las dos migraciones de departamentos se aplicaron mediante Supabase MCP al
+proyecto `Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`) el 11 de noviembre de
+2026. La validacion posterior confirmo 12 tablas publicas y 40 politicas RLS.
+El catalogo de departamentos, las asociaciones con locales y las asignaciones
+departamentales de usuarios quedaron vacios; los cinco perfiles existentes no
+fueron modificados.
 
 ## Requisitos
 
