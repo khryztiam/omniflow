@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@lib/supabase';
 import { useAuth } from '@context/AuthContext';
-import { formatearFecha } from '@utils/formateo';
+import { formatearFecha, obtenerEstiloVineta } from '@utils/formateo';
 import {
   FiArrowLeft,
   FiSend,
@@ -330,7 +330,8 @@ export default function TareaDetalleSupervisor() {
                 <div className={styles.item}>
                   <label>Prioridad</label>
                   <span
-                    className={styles[`prioridad-${tarea.prioridad?.nombre}`]}
+                    className={`${styles.vineta} ${styles[`prioridad-${tarea.prioridad?.nombre}`] || ''}`}
+                    style={obtenerEstiloVineta(tarea.prioridad?.color_hex)}
                   >
                     {tarea.prioridad?.nombre || '-'}
                   </span>
@@ -430,7 +431,8 @@ export default function TareaDetalleSupervisor() {
                 <div className={styles.item}>
                   <label>Estado Actual</label>
                   <span
-                    className={styles[`estado-${tarea.estado?.nombre || ''}`]}
+                    className={`${styles.vineta} ${styles[`estado-${tarea.estado?.nombre}`] || ''}`}
+                    style={obtenerEstiloVineta(tarea.estado?.color_hex)}
                   >
                     {tarea.estado?.nombre || '-'}
                   </span>

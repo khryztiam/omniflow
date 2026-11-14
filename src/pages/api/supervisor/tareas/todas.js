@@ -64,8 +64,8 @@ export default async function handler(req, res) {
         local_id,
         asignado_a_user:usuarios!asignado_a(id, nombre_completo, email),
         creado_por_user:usuarios!creado_por(id, nombre_completo),
-        estado:estados_tarea(id, nombre),
-        prioridad:prioridades(id, nombre),
+        estado:estados_tarea(id, nombre, color_hex),
+        prioridad:prioridades(id, nombre, color_hex),
         local:locales(id, nombre)`
       )
       .eq('creado_por', supervisorId)
@@ -112,8 +112,8 @@ export default async function handler(req, res) {
           local_id,
           asignado_a_user:usuarios!asignado_a(id, nombre_completo, email),
           creado_por_user:usuarios!creado_por(id, nombre_completo),
-          estado:estados_tarea(id, nombre),
-          prioridad:prioridades(id, nombre),
+          estado:estados_tarea(id, nombre, color_hex),
+          prioridad:prioridades(id, nombre, color_hex),
           local:locales(id, nombre)`
         )
         .in('asignado_a', usuariosIds)

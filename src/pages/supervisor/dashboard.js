@@ -22,6 +22,7 @@ import {
   FiSend,
 } from 'react-icons/fi';
 import styles from '@styles/DashboardSupervisor.module.css';
+import { obtenerEstiloVineta } from '@utils/formateo';
 
 export default function SupervisorDashboard() {
   const { cargando: cargandoAuth } = useSupervisor();
@@ -737,6 +738,7 @@ export default function SupervisorDashboard() {
                         className={obtenerColorPrioridad(
                           tarea.prioridad?.nombre
                         )}
+                        style={obtenerEstiloVineta(tarea.prioridad?.color_hex)}
                       >
                         {normalizarEtiqueta(tarea.prioridad?.nombre)}
                       </span>
@@ -748,6 +750,7 @@ export default function SupervisorDashboard() {
                       </span>
                       <span
                         className={obtenerColorEstado(tarea.estado?.nombre)}
+                        style={obtenerEstiloVineta(tarea.estado?.color_hex)}
                       >
                         {normalizarEtiqueta(tarea.estado?.nombre)}
                       </span>
@@ -917,6 +920,9 @@ export default function SupervisorDashboard() {
                                     className={obtenerColorPrioridad(
                                       tarea.prioridad?.nombre
                                     )}
+                                    style={obtenerEstiloVineta(
+                                      tarea.prioridad?.color_hex
+                                    )}
                                   >
                                     {normalizarEtiqueta(
                                       tarea.prioridad?.nombre
@@ -931,6 +937,9 @@ export default function SupervisorDashboard() {
                                   <span
                                     className={obtenerColorEstado(
                                       tarea.estado?.nombre
+                                    )}
+                                    style={obtenerEstiloVineta(
+                                      tarea.estado?.color_hex
                                     )}
                                   >
                                     {normalizarEtiqueta(tarea.estado?.nombre)}

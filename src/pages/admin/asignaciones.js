@@ -3,6 +3,7 @@ import { useAdmin } from '@hooks/useProtegerRuta';
 import { useState, useEffect } from 'react';
 import { supabase } from '@lib/supabase';
 import styles from '@styles/AsignacionesAdmin.module.css';
+import { obtenerEstiloVineta } from '@utils/formateo';
 
 export default function AsignacionesAdmin() {
   const { cargando: cargandoAuth } = useAdmin();
@@ -71,7 +72,7 @@ export default function AsignacionesAdmin() {
       const { data: tareasData, error: tareasErr } = await supabase
         .from('tareas')
         .select(
-          '*, local:locales(id, nombre), prioridad:prioridades(id, nombre)'
+          '*, local:locales(id, nombre), prioridad:prioridades(id, nombre, color_hex)'
         )
         .is('asignado_a', null)
         .order('fecha_limite', { ascending: true });
@@ -187,7 +188,10 @@ export default function AsignacionesAdmin() {
                     <h4 className={styles.titulo}>{tarea.titulo}</h4>
                     <p className={styles.local}>🏭 {tarea.local?.nombre}</p>
                   </div>
-                  <span className={styles.prioridad}>
+                  <span
+                    className={styles.prioridad}
+                    style={obtenerEstiloVineta(tarea.prioridad?.color_hex)}
+                  >
                     {tarea.prioridad?.nombre || 'N/A'}
                   </span>
                 </div>

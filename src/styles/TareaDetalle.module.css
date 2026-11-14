@@ -595,3 +595,16 @@
     max-height: 200px;
   }
 }
+
+/* Viñeta base para estados/prioridades; el color llega desde BD (color_hex) */
+.vineta {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}

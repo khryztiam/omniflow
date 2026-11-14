@@ -1,7 +1,15 @@
 .hero {
   background:
-    radial-gradient(circle at top left, rgba(59, 130, 246, 0.22), transparent 28%),
-    radial-gradient(circle at top right, rgba(20, 184, 166, 0.24), transparent 34%),
+    radial-gradient(
+      circle at top left,
+      rgba(59, 130, 246, 0.22),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(20, 184, 166, 0.24),
+      transparent 34%
+    ),
     linear-gradient(135deg, #0f172a 0%, #0f3d5e 52%, #0f766e 100%);
   border-radius: 20px;
   padding: 24px;
@@ -152,7 +160,11 @@
 
 .filtrosPanel {
   background:
-    radial-gradient(circle at top right, rgba(59, 130, 246, 0.08), transparent 30%),
+    radial-gradient(
+      circle at top right,
+      rgba(59, 130, 246, 0.08),
+      transparent 30%
+    ),
     linear-gradient(180deg, #ffffff 0%, #f4f9ff 100%);
   border: 1px solid #cfe0f1;
   border-radius: 18px;
@@ -578,4 +590,17 @@
     width: 100%;
     min-width: unset;
   }
+}
+
+/* Viñeta base para estados/prioridades; el color llega desde BD (color_hex) */
+.vineta {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 4px 12px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
 }

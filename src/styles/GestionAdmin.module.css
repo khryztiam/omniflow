@@ -100,8 +100,11 @@
 }
 
 .contenido {
-  display: flex;
+  display: grid;
+  /* 60% usuarios / 40% módulos */
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: 24px;
+  align-items: start;
 }
 
 /* Main area - Usuarios */
@@ -110,13 +113,18 @@
   min-width: 0;
 }
 
-/* Sidebar - Locales y Países */
+/* Módulos - Locales, Países, Departamentos, Estados y Prioridades */
 .sidebar {
-  width: 320px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
   min-width: 0;
+}
+
+/* Si el último módulo queda solo en su fila (Prioridades), va a la derecha */
+.sidebar > .seccion:last-child:nth-child(odd) {
+  grid-column: 2;
 }
 
 /* Secciones del sidebar */
@@ -277,19 +285,7 @@
   }
 
   .contenido {
-    flex-direction: column;
-  }
-
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .seccion {
-    flex: 1 1 200px;
-    min-width: 0;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -311,6 +307,14 @@
   .heroHighlights {
     grid-template-columns: 1fr;
   }
+
+  .sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar > .seccion:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
 }
 
 /* Scrollbar personalizada */
@@ -329,4 +333,28 @@
 
 .seccionContenido::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+.itemCatalogo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 12px;
+  min-width: 0;
+}
+
+.itemCatalogo span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.muestraColor {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
 }
