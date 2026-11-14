@@ -2,7 +2,7 @@
 
 > 🔒 **APLICACIÓN PRIVADA** — Esta aplicación es de acceso restringido y no es de uso público en este momento. Solo personal autorizado puede acceder.
 
-**Gestion clara de tareas para equipos de TI** 🧭
+**Gestion clara de tareas para equipos de trabajo** 🧭
 
 OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas hay, quien las tiene asignadas, en que estado van y que pendientes necesitan atencion. La idea es simple: menos seguimiento por mensajes sueltos y mas visibilidad en un solo lugar.
 
@@ -12,7 +12,7 @@ OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas h
 
 | Dato                           | Estado actual                                           |
 | ------------------------------ | ------------------------------------------------------- |
-| Version de la app              | `1.0.0`                                                 |
+| Version de la app              | `1.1.0`                                                 |
 | Estado funcional               | 3 roles activos: Admin, Supervisor y User ✅            |
 | Tipo de app                    | Aplicacion web privada para gestion operativa de tareas |
 | Framework                      | Next.js `^16.1.0` con Pages Router                      |

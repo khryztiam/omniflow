@@ -8,6 +8,8 @@ siguiente ciclo.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-14
+
 ### Agregado
 
 - Gestion de estados y prioridades desde `/admin/gestion`, con valores
