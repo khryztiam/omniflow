@@ -129,8 +129,8 @@ Admin en /admin/tareas → Botón "+ Nueva tarea"
 │  │  ├─ Descripción (textarea)
 │  │  ├─ Fecha inicio (date)
 │  │  ├─ Fecha límite (date)
-│  │  ├─ Estado (dropdown)
-│  │  ├─ Prioridad (dropdown: baja/media/alta/urgente)
+│  │  ├─ Estado (dropdown del catálogo configurable)
+│  │  ├─ Prioridad (dropdown del catálogo configurable)
 │  │  ├─ Local (dropdown)
 │  │  └─ Usuario asignado (dropdown opcional)
 │  │
@@ -143,7 +143,7 @@ Admin en /admin/tareas → Botón "+ Nueva tarea"
 │  └─ Headers: Authorization: Bearer {JWT}
 │
 ├─ Backend valida:
-│  ├─ JWT válido y corresponde a Admin
+│  ├─ Supabase Auth valida el JWT y el perfil corresponde a Admin
 │  ├─ Si hay responsable: usuario destino existe y está activo
 │  └─ Todos los campos obligatorios presentes
 │
@@ -634,13 +634,20 @@ ALERTAS_USUARIO
 
 ESTADOS_TAREA
 ├─ id (PK)
-├─ nombre ('pendiente'|'en_proceso'|'completado'|'pausada'|'cancelada')
-└─ color_hex (para UI)
+├─ nombre (valor configurable por el Admin)
+└─ color_hex (para las etiquetas de UI)
 
 PRIORIDADES
 ├─ id (PK)
-├─ nombre ('baja'|'media'|'alta'|'urgente')
-└─ color_hex
+├─ nombre (valor configurable por el Admin)
+├─ orden (orden del catálogo)
+└─ color_hex (para las etiquetas de UI)
+
+Los catálogos pueden ampliarse desde `/admin/gestion`; los valores base del
+sistema mantienen nombres reservados porque algunas reglas dependen de ellos.
+En particular, `completado` activa la lógica de cierre de la tarea. Los colores
+de los valores base son editables y los valores personalizados no requieren una
+migración de esquema.
 
 LOCALES
 ├─ id (UUID, PK)
@@ -672,6 +679,7 @@ Capa 1: CLIENTE (Navegador)
 Capa 2: API ROUTES (Next.js)
 │
 ├─ verifyUserToken() → Valida JWT
+│  └─ supabaseAdmin.auth.getUser(token) confirma el token; el perfil se busca por UUID
 ├─ getUsuarioDetalles() → Carga datos usuario
 ├─ permisos.js → Verifica regla de negocio
 │  ├─ esAdmin(), esSupervisor(), esUser()

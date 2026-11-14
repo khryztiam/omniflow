@@ -72,10 +72,14 @@ se conserva para validar que el departamento este habilitado para el local.
 La relacion directa permite a PostgREST resolver el departamento en las
 consultas de perfiles; esas consultas identifican explicitamente esta FK.
 
-`20261112_seed_catalogos_tareas.sql` agrega de forma idempotente los estados y
-prioridades que utiliza la aplicacion cuando esos registros no existen. Puede
-ejecutarse en una instalacion nueva o en una base existente desde el SQL Editor
-de Supabase o con `psql`.
+`20261112_seed_catalogos_tareas.sql` agrega de forma idempotente los valores
+base de estados y prioridades que necesita la logica actual de la aplicacion.
+Son valores iniciales reservados, no una lista cerrada: el administrador puede
+agregar opciones propias desde `/admin/gestion` sin una migracion de esquema.
+Antes de crear tareas, verifica que los valores base existan; la disponibilidad
+del archivo no implica que se haya aplicado en cada entorno. Puede ejecutarse
+en una instalacion nueva o en una base existente desde el SQL Editor de Supabase
+o con `psql`.
 
 Las dos migraciones de departamentos se aplicaron mediante Supabase MCP al
 proyecto `Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`) el 11 de noviembre de
@@ -222,10 +226,13 @@ activas y sin local asignado. La lista se mantiene en
 [`docs/USUARIOS_INICIALES.md`](../docs/USUARIOS_INICIALES.md); las contrasenas
 no se guardan en el repositorio.
 
-No se cargaron paises, locales, departamentos, estados de tarea, prioridades,
-tareas, comentarios, evidencias ni alertas. Por eso, antes de crear tareas, el
-equipo debe agregar al menos los catalogos de estados, prioridades, paises y
-locales, y asignar un local a supervisor y usuarios segun corresponda.
+En el aprovisionamiento inicial no se cargaron paises, locales, departamentos,
+estados de tarea, prioridades, tareas, comentarios, evidencias ni alertas. La
+migracion `20261112_seed_catalogos_tareas.sql` ofrece los valores base
+requeridos para estados y prioridades; verifica si se aplico en el entorno
+objetivo. El administrador puede agregar valores personalizados en
+`/admin/gestion`. Antes de crear tareas tambien deben existir paises y locales,
+y asignarse un local a supervisor y usuarios segun corresponda.
 
 ### Validacion y pendientes de seguridad
 

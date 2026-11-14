@@ -4,6 +4,10 @@
 **Version de la app:** `1.0.0`
 **Fuente principal:** codigo actual en `src/`, `package.json` y auditoria `npm audit`
 
+**Actualizacion funcional:** 14 de noviembre de 2026. La gestión de catálogos y
+la validación server-side del token descritas abajo corresponden a los cambios
+integrados en la rama de trabajo.
+
 ---
 
 ## Resumen
@@ -30,7 +34,8 @@ La app usa **Next.js con Pages Router**, **JavaScript**, **Supabase**, **CSS Mod
 
 - `/admin/dashboard`: tablero global por region, carga por responsable, estado global, riesgo actual y alertas.
 - `/admin/estadisticas`: analisis del portafolio de tareas, graficos y lectura por fechas.
-- `/admin/gestion`: paises, locales y usuarios.
+- `/admin/gestion`: paises, locales, departamentos, usuarios y catalogos
+  configurables de estados y prioridades.
 - `/admin/tareas`: gestion global de tareas, filtros, evidencias y comentarios.
 - `/admin/asignaciones`: asignacion centralizada.
 
@@ -56,7 +61,8 @@ La app usa **Next.js con Pages Router**, **JavaScript**, **Supabase**, **CSS Mod
 - Carga de perfil desde `usuarios`, incluyendo rol y local.
 - Redireccion por rol desde `/`.
 - Proteccion de rutas con `useAdmin`, `useSupervisor` y `useUser`.
-- APIs internas para tareas, usuarios, locales, paises, evidencias y comentarios.
+- APIs internas para tareas, usuarios, locales, paises, estados, prioridades,
+  evidencias y comentarios.
 - Realtime en cambios de `tareas` para admin, user y supervisor.
 - Alertas admin -> user mediante `alertas_usuario`.
 - Subida de evidencias al bucket `evidencias-tareas`.
@@ -83,6 +89,11 @@ Funciones/RPC relevantes:
 
 - `confirmar_alerta_usuario`
 
+Los catálogos `estados_tarea` y `prioridades` se pueden ampliar desde
+`/admin/gestion`. Los valores base con semántica interna mantienen sus nombres;
+`completado` conserva la lógica de cierre. Los valores personalizados son
+opcionales y sus colores se muestran en etiquetas de tareas.
+
 ---
 
 ## Tecnologias
@@ -107,8 +118,10 @@ Funciones/RPC relevantes:
 
 - El cliente usa `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - El backend y scripts usan `SUPABASE_SERVICE_ROLE_KEY`.
-- La validacion de permisos se hace en rutas protegidas, API routes y Supabase/RLS.
-- Las APIs actuales leen el JWT y luego consultan `usuarios` para confirmar rol y alcance.
+- Las API routes validan el JWT mediante `supabaseAdmin.auth.getUser(token)` y
+  buscan el perfil por el UUID autenticado; RLS sigue siendo una capa adicional.
+- El rol y el alcance se vuelven a comprobar en servidor antes de las
+  operaciones protegidas.
 - Para datos sensibles, mantener validacion en servidor y RLS estricto.
 
 ---

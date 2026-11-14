@@ -484,7 +484,33 @@ LOCALES
 PAÍSES
 ├─ Lista resumida
 └─ Botón "+ Agregar País"
+
+DEPARTAMENTOS
+├─ Lista resumida por locales asociados
+└─ Botón "+ Agregar Departamento"
+
+ESTADOS DE TAREA / PRIORIDADES
+├─ Lista con indicador del color configurado
+└─ Botones para agregar valores personalizados
 ```
+
+### Gestionar estados y prioridades de tareas
+
+Desde el sidebar de `/admin/gestion`, el administrador puede agregar, editar y
+eliminar estados y prioridades. Los nombres se guardan en minúsculas y los
+espacios se convierten en guiones bajos. El selector de color acepta un color
+hexadecimal y se refleja en las etiquetas de tareas de los dashboards, listados
+y detalles.
+
+Los catálogos no son listas cerradas: cada instalación puede añadir los
+valores que necesite. Los registros base usados por la lógica de la aplicación
+conservan su nombre y no se pueden eliminar; su color sí puede cambiarse. Las
+prioridades nuevas se agregan al final del orden actual. Un valor personalizado
+puede eliminarse mientras ninguna tarea lo esté usando.
+
+El estado base `completado` conserva la semántica de cierre de tarea, incluida
+la fecha de cierre. Un estado personalizado se muestra y puede asignarse, pero
+no sustituye automáticamente esa lógica.
 
 ### Crear usuario
 

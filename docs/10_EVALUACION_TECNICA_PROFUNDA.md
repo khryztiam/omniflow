@@ -167,55 +167,77 @@ El hecho de que el build de produccion complete correctamente es una senal fuert
 
 ## 7. Hallazgos tecnicos priorizados
 
-## 7.1 Critico - validacion insegura del token en backend
+## 7.1 Critico - validacion insegura del token en backend (resuelto)
 
 **Ubicacion principal:** `src/lib/auth.js`
 
-### Hallazgo
+### Hallazgo de la evaluación original
 
-Las funciones `verifyAdminToken`, `verifyAdminOrSupervisorToken` y `verifyUserToken` decodifican el JWT manualmente leyendo el payload y usando el `email`, pero no validan firma criptografica, expiracion ni integridad real del token con Supabase.
+En la evaluación original, las funciones `verifyAdminToken`,
+`verifyAdminOrSupervisorToken` y `verifyUserToken` decodificaban el JWT
+manualmente leyendo el payload y usando el `email`, sin validar firma,
+expiración ni integridad real del token con Supabase.
 
 ### Impacto
 
-Este es el hallazgo tecnico mas importante de toda la revision. Aunque existe una comprobacion posterior contra la tabla `usuarios`, el backend esta confiando en informacion de un token no verificado criptograficamente.
+En el código evaluado, aunque existía una comprobación posterior contra la tabla
+`usuarios`, el backend confiaba en información de un token no verificado
+criptográficamente.
 
 ### Riesgo
 
-- bypass parcial o total de autorizacion, segun contexto;
-- mayor superficie de ataque en endpoints protegidos;
-- falsa sensacion de seguridad por existencia de `Bearer token`.
+- permitía un bypass de autorización en endpoints protegidos;
+- ampliaba la superficie de ataque;
+- daba una falsa sensación de seguridad por exigir un `Bearer token`.
 
 ### Recomendacion
 
-Reemplazar esta estrategia por validacion real del JWT usando Supabase de forma oficial en servidor o validacion robusta del token firmado antes de autorizar cualquier endpoint.
+La recomendación quedó atendida mediante validación server-side con
+`supabaseAdmin.auth.getUser(token)` antes de autorizar los endpoints.
 
 ### Prioridad
 
 **Inmediata**
 
+### Estado al 14 de noviembre de 2026
+
+**Resuelto en la rama de trabajo:** los tres helpers validan el token mediante
+`supabaseAdmin.auth.getUser(token)` y consultan el perfil por el UUID autenticado.
+Las pruebas focalizadas `tests/auth.test.js` pasan (6/6) y `npm run build`
+finaliza correctamente. El lint focalizado de los archivos cambiados también
+pasa; el lint global todavía reporta errores en otros archivos y requiere una
+revisión independiente.
+
 ---
 
-## 7.2 Alta - inconsistencia entre rutas reales y rutas derivadas por rol
+## 7.2 Alta - inconsistencia entre rutas reales y rutas derivadas por rol (resuelto)
 
 **Ubicacion principal:** `src/lib/permisos.js`
 
-### Hallazgo
+### Hallazgo de la evaluación original
 
-`obtenerRutaPrincipal()` devuelve `'/user/mis-tareas'`, pero esa ruta no existe en `src/pages/user/`. Las rutas reales activas son `'/user/dashboard'` y `'/user/tareas'`.
+En la evaluación original, `obtenerRutaPrincipal()` devolvía
+`'/user/mis-tareas'`, ruta que no existe en `src/pages/user/`. Las rutas reales
+eran `'/user/dashboard'` y `'/user/tareas'`.
 
-### Impacto
+### Impacto observado en la evaluación original
 
-Puede generar redirecciones rotas desde `/` dependiendo del flujo de acceso.
+Podía generar redirecciones rotas desde `/` dependiendo del flujo de acceso.
 
 ### Riesgo
 
-- experiencia inconsistente para usuario;
-- errores de navegacion;
-- diferencias entre lo que hace `login.js` y lo que hace `index.js`.
+- experiencia inconsistente para el usuario;
+- errores de navegación;
+- diferencias entre lo que hacían `login.js` e `index.js`.
 
 ### Prioridad
 
 **Alta**
+
+### Estado al 14 de noviembre de 2026
+
+**Resuelto:** `obtenerRutaPrincipal()` redirige el rol `user` a
+`/user/dashboard`, una ruta existente.
 
 ---
 
@@ -373,7 +395,9 @@ Mantener los docs existentes como historial y crear documentos nuevos de referen
 ### Hallazgos observados
 
 - uso de nombres de campos distintos segun modulo;
-- dependencia de textos exactos como `completado`, `en_proceso`, etc.;
+- dependencia de nombres base como `completado` para lógica interna; los
+  estados y prioridades adicionales son configurables, pero no heredan
+  automáticamente esa semántica;
 - referencias a fechas como `fecha_creacion` frente a campos como `created_at` en otros puntos;
 - uso de columnas adicionales como `revisado_en` sin una capa uniforme de modelo.
 
@@ -420,7 +444,10 @@ Esto **no significa** que esten fallando. Significa que **todavia no se validaro
 
 ## 8.1 Autenticacion y contexto
 
-`AuthContext` resuelve bien la carga de sesion y datos del usuario, y el patron general es claro. El principal problema no esta en el contexto cliente sino en la validacion server-side del token.
+`AuthContext` resuelve la carga de sesión y datos del usuario. La validación
+server-side del token detectada en esta evaluación se corrigió: Supabase Auth
+verifica el token y las API routes buscan el perfil por el UUID autenticado.
+La evaluación de otros controles de permisos y RLS sigue siendo necesaria.
 
 ## 8.2 Paginas de usuario
 
@@ -474,11 +501,12 @@ Aun asi, sigue dependiendo de la fortaleza global de autenticacion y autorizacio
 
 ### Seguridad
 
-**Nivel:** Alto
+**Nivel:** Reevaluación integral pendiente; el hallazgo del JWT fue corregido.
 
 Motivo principal:
 
-- validacion insegura del JWT en backend.
+- la validación del JWT ahora usa Supabase Auth; RLS y los demás controles de
+  permisos requieren mantener su revisión independiente.
 
 ### Estabilidad operativa
 
@@ -487,7 +515,8 @@ Motivo principal:
 Motivo principal:
 
 - build sano y endpoints clave respondiendo;
-- pero sin pruebas automatizadas ni smoke tests de escritura todavia.
+- se agregaron pruebas focalizadas de autenticación; siguen pendientes pruebas
+  de integración y smoke tests de escritura.
 
 ### Mantenibilidad
 
@@ -507,7 +536,7 @@ Motivo principal:
 Motivo principal:
 
 - hallazgos ESLint pendientes (27 errores y 17 advertencias en la ejecucion de referencia del 11/11/2026);
-- tests casi inexistentes;
+- cobertura automatizada todavía limitada a pruebas focalizadas de autenticación;
 - herramientas presentes pero no consolidadas.
 
 ---
@@ -520,8 +549,8 @@ Objetivo: reducir riesgo inmediato.
 
 Acciones:
 
-- corregir validacion server-side del token;
-- arreglar `obtenerRutaPrincipal()` y rutas inconsistentes;
+- **Completado (14/11/2026):** corregir la validacion server-side del token;
+- **Completado (14/11/2026):** arreglar `obtenerRutaPrincipal()` y rutas inconsistentes;
 - resolver los hallazgos existentes y mantener `npm run lint` limpio;
 - crear una checklist formal de smoke test;
 - documentar el flujo real de login y roles activos.
@@ -564,8 +593,8 @@ Acciones:
 
 Si hubiera que elegir solo cinco frentes iniciales, el orden recomendado es:
 
-1. validacion real del token en backend;
-2. correccion de rutas derivadas por rol;
+1. validacion real del token en backend (**completada el 14/11/2026**);
+2. correccion de rutas derivadas por rol (**completada el 14/11/2026**);
 3. resolver la deuda de hallazgos ESLint y mantener lint limpio;
 4. formalizar smoke test de lectura y luego uno controlado de escritura;
 5. agregar validacion por esquema en endpoints criticos.
@@ -583,11 +612,14 @@ La buena noticia es que el proyecto:
 - autentica correctamente en los flujos probados;
 - expone APIs criticas operativas.
 
-La mala noticia, o mejor dicho el punto de atencion, es que la deuda tecnica mas importante esta en seguridad backend y en disciplina de calidad.
+La deuda técnica de validación insegura del JWT y la ruta derivada por rol se
+resolvió en la actualización del 14/11/2026. Aún se necesita una reevaluación
+integral de seguridad, y siguen pendientes la calidad global del lint y la
+consolidación de pruebas y APIs.
 
 La recomendacion general es avanzar por capas:
 
-- primero seguridad y consistencia minima;
+- primero reevaluar seguridad y mantener la consistencia minima;
 - despues calidad de APIs;
 - luego pruebas;
 - y finalmente refactorizacion gradual.

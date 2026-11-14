@@ -365,6 +365,12 @@ SEGURIDAD Y REALTIME
 
 ### Insertar datos iniciales
 
+Los estados y prioridades del siguiente bloque son valores base recomendados,
+no una lista cerrada. Se pueden agregar opciones propias desde
+`/admin/gestion`. Los valores base conservan su nombre porque la aplicación
+asocia lógica interna con ellos; los colores se pueden personalizar. Para el
+esquema vigente, consulta `migration/schema.sql`.
+
 ```sql
 -- Insertar roles
 INSERT INTO roles (nombre, descripcion) VALUES

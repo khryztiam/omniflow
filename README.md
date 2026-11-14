@@ -20,7 +20,7 @@ OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas h
 | Base de datos y login          | Supabase                                                |
 | Estilos                        | CSS Modules                                             |
 | Iconos                         | React Icons y Lucide React                              |
-| Ultima revision de este README | 6 de mayo de 2026 (Cambio a repo privado)               |
+| Ultima revision de este README | 14 de noviembre de 2026                                  |
 
 ---
 
@@ -29,6 +29,7 @@ OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas h
 - 📌 **Ver tareas por rol:** cada persona entra a una vista pensada para su trabajo.
 - 👥 **Asignar responsables:** admin y supervisor pueden organizar tareas segun permisos.
 - 📊 **Revisar avance:** estados, prioridades, fechas y porcentaje de progreso.
+- 🎛️ **Configurar catalogos de tareas:** admin puede agregar estados y prioridades propios y asignarles colores.
 - 🚨 **Detectar atrasos:** las vistas resaltan tareas vencidas o cercanas a vencer.
 - 💬 **Comentar tareas:** cada tarea puede tener conversacion y seguimiento.
 - 📎 **Subir evidencias:** imagenes, PDF u otros archivos permitidos desde el detalle de tarea.
@@ -50,7 +51,7 @@ Puede:
 - Revisar carga por responsable.
 - Detectar tareas vencidas o usuarios con demasiada carga.
 - Crear, editar, revisar y eliminar tareas.
-- Gestionar paises, locales y usuarios.
+- Gestionar paises, locales, departamentos, usuarios, estados y prioridades.
 - Ver estadisticas del tablero.
 - Enviar alertas individuales a responsables.
 - Consultar evidencias y comentarios.
@@ -128,7 +129,7 @@ Rutas principales:
 | Home `/`                | Redireccion automatica segun rol                                         |
 | Admin Dashboard         | Carga por responsable, estado global, riesgo actual y alertas            |
 | Admin Estadisticas      | Lectura del portafolio, graficos y analisis por fechas                   |
-| Admin Gestion           | Catalogos de paises, locales y usuarios                                  |
+| Admin Gestion           | Usuarios y catalogos de ubicacion, estados y prioridades configurables   |
 | Admin Tareas            | Lista global, filtros, creacion, edicion, evidencias y comentarios       |
 | Admin Asignaciones      | Asignacion centralizada y seguimiento operativo                          |
 | Supervisor Dashboard    | Tareas propias, tareas de supervisados, riesgo local y filtros           |
@@ -277,9 +278,14 @@ OmniFlow separa responsabilidades:
 
 Puntos a vigilar:
 
-- Las APIs actuales leen el JWT y luego contrastan el usuario contra Supabase. Conviene mantener RLS fuerte y revisar validacion criptografica del token si se endurece seguridad.
+- Las API routes validan el token de acceso con `supabaseAdmin.auth.getUser(token)` y consultan el perfil por el UUID autenticado. RLS sigue siendo una capa adicional necesaria.
 - Supervisor debe seguir limitado por local y usuarios supervisados.
 - User no debe recibir tareas que no esten asignadas a su usuario.
+
+Los catálogos de estados y prioridades se pueden ampliar desde `/admin/gestion`.
+Los registros base que tienen semántica interna conservan sus nombres y no se
+pueden eliminar; sus colores sí se pueden ajustar. Los registros personalizados
+no reemplazan automáticamente la lógica asociada a los valores base.
 
 ---
 

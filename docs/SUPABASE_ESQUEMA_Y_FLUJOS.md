@@ -155,6 +155,24 @@ Funcion/RPC relacionada:
 - `estados_tarea`
 - `prioridades`
 
+`estados_tarea` y `prioridades` son catálogos administrables desde
+`/admin/gestion`. El administrador puede agregar valores propios y asignarles
+un color; no son listas cerradas ni requieren una migración por cada opción.
+Los registros base que usa la lógica de la aplicación conservan su nombre y
+no se pueden eliminar, aunque su color sí es editable. En particular, el estado
+base `completado` activa la fecha y las reglas de cierre. Las prioridades nuevas
+se agregan al final del orden existente y un valor no se puede borrar mientras
+esté referenciado por tareas.
+
+Los endpoints administrativos son:
+
+- `/api/admin/estados` y `/api/admin/estados/[id]`
+- `/api/admin/prioridades` y `/api/admin/prioridades/[id]`
+
+Las rutas validan el rol admin en servidor y el color en formato `#RRGGBB`.
+Las operaciones CRUD sobre los catálogos se ejecutan server-side con
+`supabaseAdmin` una vez que `verifyAdminToken` autoriza la solicitud.
+
 ## Relaciones clave
 
 - Un `usuario` pertenece a un `rol`.
@@ -204,8 +222,10 @@ El backend valida permisos revisando el token `Bearer` y consultando la tabla `u
 
 Observacion importante:
 
-- En `src/lib/auth.js` se parsea el payload del JWT y luego se contrasta el email contra `usuarios`.
-- Esto implementa control de acceso aplicativo, pero no equivale a verificacion criptografica completa del token.
+- Los helpers `verifyAdminToken`, `verifyAdminOrSupervisorToken` y
+  `verifyUserToken` validan el token con `supabaseAdmin.auth.getUser(token)`.
+- El perfil y el rol se buscan por el UUID autenticado, no por un email leído
+  de un payload sin verificar.
 
 ## Realtime
 
@@ -330,7 +350,8 @@ Supervisor:
 
 ## Riesgos tecnicos visibles desde el codigo actual
 
-- La validacion del token en backend depende de parsear JWT y luego consultar `usuarios`.
+- La autenticación server-side depende de Supabase Auth para verificar firma y
+  vigencia del token; las políticas RLS deben mantenerse como defensa adicional.
 - El flujo supervisor ya esta implementado en vistas y APIs, pero debe validarse siempre contra local, subordinados y RLS.
 - La seguridad real depende de mantener consistentes tanto las validaciones API como las politicas RLS.
 

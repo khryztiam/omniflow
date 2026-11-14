@@ -74,7 +74,7 @@ No usa App Router, Tailwind ni TypeScript en el codigo de la app.
 | --------------------- | ----------------------------------------------------------------------------------- |
 | Validacion de APIs    | Debe mantenerse fuerte para evitar accesos fuera de rol                             |
 | RLS en Supabase       | Es clave para que los permisos no dependan solo del frontend                        |
-| Token en backend      | Hoy se lee el JWT y se contrasta contra `usuarios`; conviene endurecer si se escala |
+| Token en backend      | Supabase Auth valida el JWT y el perfil se consulta por el UUID autenticado |
 | Dependencias          | `npm audit` reporta 7 vulnerabilidades moderadas                                    |
 | Documentacion antigua | Algunos documentos tenian referencias ya desactualizadas                            |
 

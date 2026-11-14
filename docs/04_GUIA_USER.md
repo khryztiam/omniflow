@@ -293,30 +293,23 @@ Verás la información principal sin salir de la pantalla:
 **Escenario:** Empezaste a trabajar
 
 ```
-Campo "Estado actual": [Pendiente ▼]
+Campo "Estado actual": [Estado del catálogo ▼]
 Click en el dropdown
-Selecciona: [En Proceso]
+Selecciona: [una opción disponible]
 ↓
 Click: [Guardar cambios]
 ↓
 Se actualiza en dashboard admin
 ```
 
-**Estados disponibles:**
+**Estados disponibles:** las opciones se cargan del catálogo configurado por
+el administrador y pueden variar entre instalaciones. Selecciona la que mejor
+describa el trabajo actual; si falta una opción adecuada, solicita al
+administrador que la agregue desde Gestión.
 
-```
-1. Pendiente
-   └─ Aún no empezaste
-
-2. En Proceso
-   └─ Ya empezaste, estás trabajando
-
-3. Completada
-   └─ Terminaste 100%, listo para revisar
-
-4. Pausada
-   └─ Temporalmente detenida (bloqueante)
-```
+El estado base `Completado` registra el cierre de la tarea. Los estados
+personalizados sirven para describir el flujo del equipo, pero no activan por
+sí solos la lógica de cierre.
 
 ### Actualizar porcentaje
 
@@ -331,14 +324,10 @@ O escribe directamente: [50] %
 Click en [Guardar cambios] para registrar el nuevo avance
 ```
 
-**Guía de % por estado:**
-
-```
-PENDIENTE:   0%   (no empezó)
-EN PROCESO:  1-99% (en progreso)
-COMPLETADA:  100%  (terminado)
-PAUSADA:     x%   (el % que tenía cuando pausó)
-```
+El porcentaje y el estado son datos complementarios: actualiza el porcentaje
+según el avance real y selecciona por separado el estado que corresponda al
+catálogo de tu instalación. Un estado personalizado no asigna automáticamente
+un porcentaje.
 
 ---
 
