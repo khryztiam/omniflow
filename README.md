@@ -121,4 +121,3 @@ Los cambios publicados se registran en [CHANGELOG.md](./CHANGELOG.md). La línea
 - **Claudia Pocasangre** — Organización y documentación
 - **Adrian Hernandez** — Integración y pruebas de usabilidad
 
-Si cambian las responsabilidades, actualiza este listado con el nombre y rol acordados por el equipo.
