@@ -32,19 +32,25 @@ La aplicación permite organizar tareas, responsables, estados, prioridades, fec
 
 ### 🔴 Admin
 
-Administra la operación global: personas, catálogos y tareas, y consulta el estado general del trabajo.
+- Supervisa el estado general, las estadísticas, la carga por responsable y las tareas atrasadas.
+- Crea, edita y asigna tareas; administra usuarios, ubicaciones y catálogos de estados y prioridades.
+- Envía alertas y consulta comentarios y evidencias de las tareas.
 
 Guía de uso: [Administración](./docs/03_GUIA_ADMIN.md).
 
 ### 🟡 Supervisor
 
-Gestiona tareas y usuarios dentro de su alcance, y da seguimiento al trabajo de su equipo.
+- Da seguimiento a sus tareas y a las de los usuarios que supervisa dentro de su alcance.
+- Filtra tareas y puede crear o reasignar trabajo a usuarios supervisados.
+- Consulta comentarios y evidencias, y gestiona la relación con sus usuarios supervisados.
 
 Guía de uso: [Supervisor](./docs/05_GUIA_SUPERVISOR.md).
 
 ### 🟢 User
 
-Consulta sus tareas asignadas, registra avances, comentarios y evidencias, y confirma alertas recibidas.
+- Consulta únicamente las tareas que tiene asignadas y su avance, estado y fechas.
+- Actualiza el progreso, agrega comentarios y carga evidencias del trabajo.
+- Recibe alertas de Admin y confirma su lectura.
 
 Guía de uso: [Usuario](./docs/04_GUIA_USER.md).
 
