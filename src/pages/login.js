@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '@context/AuthContext';
 import styles from '@styles/Login.module.css';
-import { FiUser, FiLock } from 'react-icons/fi';
+import { FiUser, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
 import OmniFlowMark from '@components/OmniFlowMark';
 import packageInfo from '../../package.json';
 
@@ -13,6 +13,7 @@ export default function Login() {
   const router = useRouter();
   const [username, setUsername] = useState('');
   const [pass, setPass] = useState('');
+  const [mostrarContrasena, setMostrarContrasena] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState('');
 
@@ -67,7 +68,7 @@ export default function Login() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="usuario"
+                placeholder="Usuario"
                 className={styles.entrada}
                 required
                 disabled={cargando}
@@ -77,17 +78,41 @@ export default function Login() {
           </div>
 
           <div className={styles.grupo}>
-            <div className={styles.inputConIcono}>
+            <div
+              className={`${styles.inputConIcono} ${styles.campoContrasena}`}
+            >
               <FiLock className={styles.icono} />
               <input
-                type="password"
+                id="login-contrasena"
+                type={mostrarContrasena ? 'text' : 'password'}
                 value={pass}
                 onChange={(e) => setPass(e.target.value)}
-                placeholder="contrasena"
+                placeholder="Contraseña"
                 className={styles.entrada}
+                autoComplete="current-password"
+                aria-label="Contraseña"
                 required
                 disabled={cargando}
               />
+              <button
+                type="button"
+                className={styles.botonContrasena}
+                aria-label={
+                  mostrarContrasena
+                    ? 'Ocultar contraseña'
+                    : 'Mostrar contraseña'
+                }
+                aria-controls="login-contrasena"
+                aria-pressed={mostrarContrasena}
+                onClick={() => setMostrarContrasena((visible) => !visible)}
+                disabled={cargando}
+              >
+                {mostrarContrasena ? (
+                  <FiEyeOff aria-hidden="true" />
+                ) : (
+                  <FiEye aria-hidden="true" />
+                )}
+              </button>
             </div>
           </div>
 

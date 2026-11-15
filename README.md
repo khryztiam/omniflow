@@ -20,7 +20,7 @@ OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas h
 | Base de datos y login          | Supabase                                                |
 | Estilos                        | CSS Modules                                             |
 | Iconos                         | React Icons y Lucide React                              |
-| Ultima revision de este README | 14 de noviembre de 2026                                  |
+| Ultima revision de este README | 15 de noviembre de 2026                                  |
 
 ---
 
@@ -36,6 +36,31 @@ OmniFlow ayuda a que administradores, supervisores y usuarios sepan que tareas h
 - 🔔 **Enviar alertas:** el admin puede mandar avisos directos a usuarios y ver si fueron atendidos.
 - 🌎 **Trabajar por local y pais:** la informacion se organiza por ubicacion cuando aplica.
 - ⚡ **Actualizar en tiempo real:** dashboards y listas se refrescan cuando cambian las tareas.
+
+---
+
+## Uso desde el Movil
+
+En pantallas de hasta **768 px**, el boton **Menú** junto al logo abre la
+navegacion correspondiente a tu rol, tu informacion de usuario y el boton de
+cerrar sesion. El panel aparece sobre la pagina sin mover su contenido. Si la
+pantalla es baja, puedes desplazarte dentro del menu hasta llegar al cierre de
+sesion.
+
+Para cerrarlo, pulsa **Cerrar**, selecciona una pagina, toca fuera del panel o
+presiona **Escape**. En escritorio se mantiene el sidebar visible.
+
+En el login, escribe tu nombre de usuario en **Usuario** y tu clave en
+**Contraseña**. El boton con el icono de ojo permite mostrarla y volver a
+ocultarla; la contrasena empieza oculta. El formulario sigue utilizando la
+autenticacion habitual de Supabase.
+
+Los filtros de Todas las tareas del supervisor y las tarjetas de Gestion de
+usuarios se adaptan al ancho disponible. Las tablas con muchas columnas tienen
+su propio desplazamiento horizontal.
+
+Las comprobaciones por pantalla y por rol estan en
+[la guia de validacion rapida](docs/11_GUIA_VALIDACION_RAPIDA.md#validacion-responsive-y-login).
 
 ---
 

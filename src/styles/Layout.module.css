@@ -41,6 +41,24 @@
   gap: 10px;
 }
 
+.botonMenu {
+  display: none;
+}
+
+.panelMenu {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.botonMenu:focus-visible,
+.navItem:focus-visible,
+.btnLogout:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
 .logo {
   display: flex;
   align-items: center;
@@ -394,24 +412,29 @@
 @media (max-width: 768px) {
   .contenedor {
     flex-direction: column;
+    height: 100dvh;
   }
 
   .sidebar {
+    position: relative;
+    z-index: 100;
     width: 100%;
-    max-height: 60px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding: 0 16px;
+    min-height: 60px;
+    flex-shrink: 0;
+    border-right: none;
+    overflow: visible;
   }
 
   .logoArea {
     flex-direction: row;
     align-items: center;
-    padding: 0;
+    justify-content: space-between;
+    min-height: 60px;
+    flex-shrink: 0;
+    padding: 8px 16px;
     border: none;
     gap: 8px;
-    width: auto;
+    width: 100%;
   }
 
   .brandRow {
@@ -432,16 +455,70 @@
     font-size: 24px;
   }
 
-  .nav {
+  .botonMenu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    background: transparent;
+    color: #e2e8f0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .botonMenu svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .panelMenu {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: calc(100vh - 76px);
+    max-height: calc(100dvh - 76px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    border-top: 1px solid #334155;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 12px 24px rgba(15, 23, 42, 0.24);
+  }
+
+  .panelMenu.menuAbierto {
+    display: flex;
+  }
+
+  .nav {
+    flex: none;
+    overflow-y: visible;
+  }
+
+  .navItem {
+    min-height: 44px;
   }
 
   .footer {
-    display: none;
+    flex-shrink: 0;
+  }
+
+  .btnLogout {
+    width: 44px;
+    height: 44px;
+    color: #cbd5e1;
   }
 
   .main {
     width: 100%;
+    min-height: 0;
   }
 
   .contenido {

@@ -553,6 +553,11 @@
     flex-direction: column;
   }
 
+  .hero > :first-child,
+  .heroActions {
+    flex: 0 1 auto;
+  }
+
   .heroActions {
     width: 100%;
     min-width: 0;
