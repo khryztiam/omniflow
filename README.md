@@ -34,15 +34,21 @@ La aplicación permite organizar tareas, responsables, estados, prioridades, fec
 
 Administra la operación global: personas, catálogos y tareas, y consulta el estado general del trabajo.
 
+Guía de uso: [Administración](./docs/03_GUIA_ADMIN.md).
+
 ### 🟡 Supervisor
 
 Gestiona tareas y usuarios dentro de su alcance, y da seguimiento al trabajo de su equipo.
+
+Guía de uso: [Supervisor](./docs/05_GUIA_SUPERVISOR.md).
 
 ### 🟢 User
 
 Consulta sus tareas asignadas, registra avances, comentarios y evidencias, y confirma alertas recibidas.
 
-Las guías de [Admin](./docs/03_GUIA_ADMIN.md), [Supervisor](./docs/05_GUIA_SUPERVISOR.md) y [User](./docs/04_GUIA_USER.md) explican el uso detallado. Son referencias complementarias: contrasta los pasos con la interfaz actual y con el [estado vigente del proyecto](./docs/00_ESTADO_ACTUAL.md).
+Guía de uso: [Usuario](./docs/04_GUIA_USER.md).
+
+Las guías por rol son referencias complementarias: contrasta sus pasos con la interfaz actual y con el [estado vigente del proyecto](./docs/00_ESTADO_ACTUAL.md).
 
 > [Nota del equipo: añadir aquí una decisión o aprendizaje concreto sobre cómo quieren organizar el seguimiento diario de tareas.]
 
