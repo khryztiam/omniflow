@@ -8,6 +8,35 @@ siguiente ciclo.
 
 ## [Unreleased]
 
+### Agregado
+
+- Menu movil compartido para admin, supervisor y user en pantallas de hasta
+  768 px. Conserva los enlaces de cada rol, la informacion del usuario y el
+  cierre de sesion en un panel superpuesto con desplazamiento propio.
+- Boton para mostrar y ocultar la contrasena en el login, disponible en movil
+  y escritorio, con etiqueta accesible y area tactil de 44 px.
+
+### Corregido
+
+- La navegacion y el cierre de sesion vuelven a estar disponibles en movil.
+  El menu se cierra con su boton, Escape, una pulsacion fuera del panel, al
+  salir con el teclado o al navegar, sin desplazar el contenido de la pagina.
+- Los filtros de `/supervisor/asignaciones` se reorganizan en dos columnas
+  hasta 1200 px y una hasta 768 px; los controles respetan el ancho disponible.
+- Las tarjetas de resumen de `/supervisor/gestion` se apilan hasta 640 px y
+  los nombres largos de usuarios, locales y departamentos pueden ajustarse.
+- Los encabezados de `/admin/tareas`, `/supervisor/tareas` y
+  `/supervisor/asignaciones` usan alturas naturales en movil, evitando los
+  espacios grandes causados por las bases flex del diseno de escritorio.
+- Las tablas genericas limitan el desplazamiento horizontal a su propio
+  contenedor para mantener accesibles las columnas anchas.
+- Los campos del login muestran `Usuario` y `Contraseña`.
+
+### Documentacion
+
+- Se agregaron instrucciones de uso movil al README y una matriz de
+  comprobaciones responsive y de login a la guia de validacion rapida.
+
 ## [1.1.0] - 2026-11-14
 
 ### Agregado

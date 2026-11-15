@@ -1,7 +1,7 @@
 # Guia rapida: validacion de acceso y visibilidad
 
 **Ubicacion vigente:** `docs/11_GUIA_VALIDACION_RAPIDA.md`
-**Fecha de revision:** 27 de abril de 2026
+**Fecha de revision:** 15 de noviembre de 2026
 
 ---
 
@@ -12,6 +12,69 @@ Esta guía valida que **cada rol solo pueda ver y hacer lo que le corresponde**:
 - **User**: ve solo sus tareas
 - **Supervisor**: ve tareas de sus subordinados
 - **Admin**: ve todo
+
+---
+
+## Validacion Responsive y Login
+
+Usa cuentas autorizadas de **admin**, **supervisor** y **user**. Las cuentas
+iniciales se describen en [USUARIOS_INICIALES.md](USUARIOS_INICIALES.md); sus
+contrasenas no se guardan en el repositorio. Para probar solo la presentacion,
+tambien se pueden usar perfiles y respuestas de datos simulados, pero eso no
+reemplaza comprobar el login y los permisos reales con cuentas validas.
+
+### Matriz de Pantallas
+
+| Ancho | Comportamiento a comprobar |
+| --- | --- |
+| 320, 375 y 412 px | Menu movil cerrado al entrar; controles y tarjetas dentro del ancho disponible |
+| 640 px | Resumen de Gestion de usuarios del supervisor en una columna |
+| 768 px | Ultimo ancho con menu movil; filtros del supervisor en una columna |
+| 769, 1024 y 1200 px | Sidebar de escritorio; filtros de Todas las tareas del supervisor en dos columnas |
+| 1440 px | Disposicion de escritorio de encabezados y sidebar |
+| 375 x 320 px | Menu superpuesto limitado al alto visible; logout accesible, con scroll interno si hace falta |
+
+### Login y Navegacion de los Tres Roles
+
+- [ ] `/login` muestra los campos `Usuario` y `Contraseña`; la clave empieza
+  oculta y el boton de ojo alterna su visibilidad sin borrar el valor ni enviar
+  el formulario. Comprobar tanto con teclado como con pantalla tactil.
+- [ ] El envio sigue exigiendo usuario y contrasena; el boton de visibilidad se
+  deshabilita mientras se procesa el ingreso.
+- [ ] A 768 px o menos, **Menú** abre enlaces del rol correcto, nombre, rol y
+  cierre de sesion. El contenido de la pagina mantiene su posicion y scroll.
+- [ ] **Cerrar**, Escape, pulsar fuera del panel, mover el foco fuera del menu y
+  seleccionar un enlace cierran el panel. Escape devuelve el foco al boton.
+- [ ] El menu funciona en dashboards y listados que no muestran el encabezado
+  de pagina; sus enlaces y botones tienen un area tactil de al menos 44 px y
+  foco visible.
+- [ ] Al pasar de movil a escritorio se muestra el sidebar y se oculta el boton
+  movil; al regresar a movil, el menu queda cerrado.
+- [ ] Cerrar sesion conduce a `/login` y las rutas protegidas requieren volver
+  a iniciar sesion. Repetir con admin, supervisor y user.
+
+### Pantallas con Ajustes de Formato
+
+- [ ] En `/supervisor/gestion`, los tres indicadores se apilan en pantallas de
+  hasta 640 px. Probar listas vacias, errores de carga y nombres largos de
+  usuarios, locales y departamentos.
+- [ ] En `/supervisor/asignaciones`, fechas, busqueda, responsable, estado,
+  prioridad, local y el boton para limpiar filtros quedan dentro del panel.
+  Probar busqueda y limpieza con datos cargados, ademas de estados vacios y
+  errores de carga.
+- [ ] En `/admin/tareas`, `/supervisor/tareas` y
+  `/supervisor/asignaciones`, el resumen, los botones o el selector de estado
+  siguen al texto del encabezado sin espacios verticales grandes en movil.
+- [ ] En tablas genericas con datos, las columnas anchas y las acciones se
+  alcanzan desplazando el contenedor de la tabla, sin extender toda la pagina.
+
+### Alcance y Pendientes Conocidos
+
+Estas comprobaciones cubren los cambios de presentacion y accesibilidad. No
+implican cambios en roles, permisos, esquema de Supabase ni politicas RLS.
+Durante la revision se observo desbordamiento independiente en los filtros de
+`/admin/tareas` a 769 y 1024 px; no forma parte de la correccion de altura del
+encabezado movil y debe revisarse por separado.
 
 ---
 
@@ -341,4 +404,4 @@ curl -H "Authorization: Bearer TOKEN" \
 
 ---
 
-**Ultima actualización**: 27 de abril de 2026
+**Ultima actualización**: 15 de noviembre de 2026
