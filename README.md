@@ -1,179 +1,112 @@
-# OmniFlow
+# 🚀 OmniFlow
 
-> **Aplicación privada:** OmniFlow está dirigida a personal autorizado y no
-> ofrece acceso público.
+> **Aplicación privada:** OmniFlow está dirigida a personal autorizado y no ofrece acceso público.
 
-OmniFlow es una aplicación web para organizar y dar seguimiento al trabajo de
-equipos operativos. Centraliza las tareas, responsables, fechas, avances y
-evidencias para reducir el seguimiento disperso y dar a cada rol una vista
-acorde con su alcance.
+OmniFlow centraliza la asignación y el seguimiento de tareas operativas. Cada persona trabaja desde una vista según su rol y puede consultar avances, fechas, comentarios y evidencias en un mismo lugar.
 
-## Propósito y alcance
+## 🧭 Índice
 
-El proyecto busca que el equipo pueda:
+- [Resumen](#resumen)
+- [Funciones y roles](#funciones-y-roles)
+- [Arquitectura](#arquitectura)
+- [Inicio local](#inicio-local)
+- [Comandos](#comandos)
+- [Documentación del proyecto](#documentación-del-proyecto)
+- [Validación y seguridad](#validación-y-seguridad)
+- [Historial](#historial)
+- [Equipo / Autores](#equipo--autores)
 
-- asignar y consultar tareas en un espacio común;
-- distinguir responsabilidades y visibilidad para administración,
-  supervisión y usuarios operativos;
-- registrar avances, comentarios, evidencias y alertas;
-- identificar vencimientos y carga de trabajo con mayor claridad.
+## 📌 Resumen
 
-El alcance actual comprende tres roles activos —admin, supervisor y user— y
-flujos de tareas, catálogos, comentarios, evidencias, alertas y actualización
-en tiempo real. La aplicación es privada y depende de un proyecto Supabase
-configurado para el entorno correspondiente.
-
-## Funcionalidades principales
-
-| Rol | Aporte al flujo operativo |
+| Dato | Estado |
 | --- | --- |
-| **Admin** | Visión global; gestiona usuarios, ubicaciones, catálogos, tareas y asignaciones; revisa estadísticas y puede enviar alertas. |
-| **Supervisor** | Organiza tareas y personas dentro de su alcance local, y da seguimiento a avances, comentarios y evidencias. |
-| **User** | Consulta sus tareas asignadas, actualiza estado y progreso, y registra comentarios y evidencias. |
+| Versión | `1.1.0` |
+| Estado | Aplicación privada con tres roles activos |
+| Framework | Next.js `^16.1.0` con Pages Router |
+| Interfaz | React `^18.3.0`, JavaScript y CSS Modules |
+| Servicios | Supabase Auth, base de datos, Storage y Realtime |
 
-Entre los avances funcionales se incluyen catálogos configurables de estados y
-prioridades, evidencia adjunta a tareas, comentarios, alertas con confirmación
-de lectura y actualización de vistas ante cambios en tareas.
+## ✨ Funciones y roles
 
-La interfaz también incorpora ajustes de usabilidad: el desplazamiento del
-menú no mueve el resto de la página, el formulario de inicio de sesión permite
-mostrar u ocultar la contraseña y se actualizaron los textos de usuario y
-contraseña.
+La aplicación permite organizar tareas, responsables, estados, prioridades, fechas, comentarios y evidencias. También incluye catálogos configurables y alertas directas de administración a usuarios.
 
-## Arquitectura y componentes
+### 🔴 Admin
 
-| Componente | Responsabilidad |
+Administra la operación global: personas, catálogos y tareas, y consulta el estado general del trabajo.
+
+### 🟡 Supervisor
+
+Gestiona tareas y usuarios dentro de su alcance, y da seguimiento al trabajo de su equipo.
+
+### 🟢 User
+
+Consulta sus tareas asignadas, registra avances, comentarios y evidencias, y confirma alertas recibidas.
+
+Las guías de [Admin](./docs/03_GUIA_ADMIN.md), [Supervisor](./docs/05_GUIA_SUPERVISOR.md) y [User](./docs/04_GUIA_USER.md) explican el uso detallado. Son referencias complementarias: contrasta los pasos con la interfaz actual y con el [estado vigente del proyecto](./docs/00_ESTADO_ACTUAL.md).
+
+> [Nota del equipo: añadir aquí una decisión o aprendizaje concreto sobre cómo quieren organizar el seguimiento diario de tareas.]
+
+## 🏗️ Arquitectura
+
+El proyecto usa Pages Router y organiza la aplicación en `src/pages` (páginas y API routes), `src/components`, `src/context`, `src/hooks`, `src/lib`, `src/styles` y `src/utils`.
+
+La autenticación usa Supabase; las API routes validan identidad y permisos en servidor. Supabase también proporciona persistencia, Storage para evidencias y Realtime para cambios de tareas. Consulta los [flujos funcionales](./docs/01_FLUJOS_DETALLADOS.md) y el [esquema, relaciones y acceso a datos](./docs/SUPABASE_ESQUEMA_Y_FLUJOS.md) para el detalle.
+
+> [Nota del equipo: documentar aquí las decisiones de arquitectura que deban mantenerse al incorporar nuevas rutas o permisos.]
+
+## 🛠️ Inicio local
+
+Requiere Node.js y npm, además de un proyecto Supabase configurado. Instala dependencias con `npm install`, crea `.env.local` a partir de `.env.example` y completa sus valores; inicia con `npm run dev`.
+
+No publiques `.env.local` ni expongas `SUPABASE_SERVICE_ROLE_KEY` en el cliente. Para el aprovisionamiento de Supabase, consulta la guía de [migración del esquema](./migration/README.md).
+
+La [guía de instalación y despliegue](./docs/06_INSTALACION_DEPLOYMENT.md) contiene pasos adicionales, pero algunas instrucciones y ejemplos pueden no corresponder al estado actual. Verifica los comandos en `package.json`, las variables en `.env.example` y el esquema en `migration/README.md` antes de seguirlos.
+
+## ⌨️ Comandos
+
+| Comando | Uso |
 | --- | --- |
-| **Interfaz web** | Páginas de Next.js Pages Router y componentes React organizados por rol; utiliza JavaScript y CSS Modules. |
-| **Autenticación y perfil** | Supabase Auth gestiona la sesión; el perfil de la aplicación aporta rol y alcance operativo. |
-| **API y lógica de servidor** | Las API Routes de Next.js atienden operaciones protegidas y aplican las comprobaciones de identidad, rol y alcance descritas en la documentación técnica. |
-| **Datos y archivos** | Supabase proporciona PostgreSQL, almacenamiento de evidencias y servicios de datos. |
-| **Actualización de vistas** | Supabase Realtime notifica cambios para que las vistas pertinentes vuelvan a consultar información. |
+| `npm run dev` | Inicia el servidor de desarrollo |
+| `npm run build` | Compila para producción |
+| `npm run start` | Ejecuta la compilación |
+| `npm run lint` | Ejecuta ESLint sobre `src` |
+| `npm test` | Ejecuta las pruebas con Vitest |
 
-El sistema combina API Routes con algunas consultas directas desde el cliente.
-Las operaciones que requieren privilegios elevados se realizan en el servidor;
-RLS en Supabase es una capa adicional que debe mantenerse alineada con los
-permisos de la aplicación.
+## 📚 Documentación del proyecto
 
-**Stack:** Next.js `^16.1.0` con Pages Router, React `^18.3.0`, JavaScript,
-Supabase y CSS Modules.
+El [índice maestro](./docs/09_INDICE_MAESTRO.md) reúne la documentación disponible. Atajos por tema:
 
-## API
+| Tema | Documento |
+| --- | --- |
+| Estado y funcionalidades confirmadas | [Estado actual](./docs/00_ESTADO_ACTUAL.md) |
+| Flujos de login, roles y tareas | [Flujos detallados](./docs/01_FLUJOS_DETALLADOS.md) |
+| Esquema Supabase, relaciones y permisos | [Esquema y flujos Supabase](./docs/SUPABASE_ESQUEMA_Y_FLUJOS.md) |
+| Instalación y despliegue | [Guía de instalación](./docs/06_INSTALACION_DEPLOYMENT.md) |
+| Esquema, aprovisionamiento y pendientes de migración | [Migración de Supabase](./migration/README.md) |
+| Cuentas iniciales (sin contraseñas) | [Usuarios iniciales](./docs/USUARIOS_INICIALES.md) |
+| Pruebas de acceso y presentación | [Validación rápida](./docs/11_GUIA_VALIDACION_RAPIDA.md) y [matriz de acceso](./docs/12_VALIDACION_VISIBILIDAD_ACCESO.md) |
+| Revisión de dependencias | [Vulnerabilidades registradas](./docs/13_VULNERABILIDADES_ACTUALES.md) |
+| Análisis técnico y riesgos | [Evaluación técnica](./docs/10_EVALUACION_TECNICA_PROFUNDA.md), [hallazgos](./docs/02_HALLAZGOS_RECOMENDACIONES.md) y [matriz de riesgos](./docs/07_MATRIZ_RIESGOS.md) |
+| Cambios por versión | [Changelog](./CHANGELOG.md) y [historial anterior](./CHANGELOG_HISTORICO.md) |
 
-La API de OmniFlow conecta las pantallas con las operaciones de negocio y los
-datos. Sus servicios principales cubren consultas y cambios de tareas por rol,
-asignaciones, administración de usuarios y catálogos, además de los flujos de
-comentarios, evidencias y alertas. El acceso se limita según la identidad, el
-rol y el alcance del usuario; los datos se guardan en Supabase y las vistas
-pueden refrescarse mediante Realtime.
+Los documentos de análisis y las guías por rol pueden conservar observaciones históricas o pasos no vigentes. Usa `docs/00_ESTADO_ACTUAL.md` y el código como referencia antes de tomar decisiones técnicas.
 
-Los detalles de flujos y validación de acceso están en
-[Flujos detallados](./docs/01_FLUJOS_DETALLADOS.md) y
-[Validación de visibilidad y acceso](./docs/12_VALIDACION_VISIBILIDAD_ACCESO.md).
-El modelo de datos y su relación con sus servicios se describe en
-[Esquema y flujos de Supabase](./docs/SUPABASE_ESQUEMA_Y_FLUJOS.md). No existe
-un documento independiente de referencia OpenAPI en la documentación actual.
+## ✅ Validación y seguridad
 
-## Asistencia de IA y skills del repositorio
+Antes de integrar cambios, ejecuta `npm run lint`, `npm run build` y `npm test`. Para cambios de acceso, valida los tres roles y sus límites con las [guías de validación](./docs/11_GUIA_VALIDACION_RAPIDA.md).
 
-El repositorio incluye instrucciones y guías para orientar a agentes de
-programación con IA hacia cambios pequeños, compatibles con el stack y
-verificables:
+El último informe documentado de `npm audit` corresponde al 27 de abril de 2026; no debe interpretarse como un resultado actualizado. Revisa [el informe](./docs/13_VULNERABILIDADES_ACTUALES.md) y los [pendientes de seguridad de Supabase](./migration/README.md) para conocer su fecha y contexto.
 
-- [Instrucciones para Copilot](./.github/copilot-instructions.md) establece
-  convenciones del proyecto, restricciones de stack y criterios de seguridad.
-- [AGENTS.md](./AGENTS.md) define el flujo de trabajo: entender el cambio,
-  revisar el contexto, minimizar el alcance y validar el resultado.
-- [docs/skills/](./docs/skills/) reúne siete guías temáticas: revisión de API,
-  control de cambios, sincronización de documentación, UI/UX, commits, cambios
-  seguros y revisión de Supabase.
+## 📝 Historial
 
-Cada guía describe cuándo usarla, qué revisar, riesgos, estrategia y una lista
-de validación. En conjunto, personalizan la forma de interpretar y resolver
-tareas al priorizar el código existente, proteger autenticación y datos, evitar
-refactors no solicitados y explicar cómo se validó el trabajo. Son documentos
-de orientación para agentes, no funcionalidades ejecutables de OmniFlow. El
-repositorio no registra una comparación formal del comportamiento del agente
-antes de estas instrucciones ni un inventario de modelos o herramientas de IA
-utilizados durante todo el desarrollo.
+Los cambios publicados se registran en [CHANGELOG.md](./CHANGELOG.md). La línea de versiones anterior se conserva en [CHANGELOG_HISTORICO.md](./CHANGELOG_HISTORICO.md).
 
-## Equipo y aportaciones
+## 👥 Equipo / Autores
 
-El desarrollo de **OmniFlow** reúne trabajo de base de datos, seguridad, experiencia
-de usuario y documentación. Estas son las contribuciones realizadas por el equipo
-hasta esta entrega:
+- **Christian Melendez** — Base de datos y mantenimiento técnico
+- **Elizabeth Guevara** — Catálogos, permisos y gestión de tareas
+- **Angel Vega** — Experiencia móvil y usabilidad
+- **Claudia Pocasangre** — Organización y documentación
+- **Adrian Hernandez** — Integración y pruebas de usabilidad
 
-### Base de datos y mantenimiento técnico - Christian Melendez
-
-- Recreó la base de datos para mantener el proyecto independiente de la instancia
-  que se encuentra en funcionamiento y realizó ajustes de normalización.
-- Revisó y reorganizó elementos del esquema: recuperó el uso de la tabla
-  `departamentos` y retiró una tabla que había quedado sin utilidad.
-- Preparó estados y prioridades iniciales para facilitar las pruebas.
-- Actualizó la documentación técnica e incorporó la deuda técnica y los cambios
-  previstos para próximas etapas.
-- Trabajó en el fortalecimiento de la seguridad del token JWT y en la revisión
-  de aspectos pendientes de ESLint y vulnerabilidades.
-
-### Catálogos, permisos y gestión de tareas - Elizabeth Guevara
-
-- Añadió el campo `color_hex` al catálogo de prioridades para permitir identificar
-  visualmente cada prioridad.
-- Configuró Row Level Security (RLS) para los catálogos de estados y prioridades:
-  los usuarios autenticados pueden consultarlos y únicamente el administrador
-  puede modificarlos.
-- Implementó la gestión personalizada de estados y prioridades desde el módulo
-  de administración.
-- Integró los nuevos valores en sus módulos correspondientes y en el formulario
-  de asignación de tareas.
-- Trabajó en la optimización del espacio disponible en pantalla y en pruebas de
-  los ajustes realizados.
-
-### Experiencia móvil y usabilidad - Angel Vega
-
-- Incorporó y ajustó el menú de navegación para mejorar su comportamiento en
-  dispositivos móviles.
-- Modificó el menú para que su apertura y desplazamiento no muevan el contenido
-  principal de la página.
-- Añadió la opción para mostrar u ocultar la contraseña en el inicio de sesión.
-- Mejoró los textos de la interfaz relacionados con el inicio de sesión,
-  sustituyendo etiquetas como «usuario» y «contraseña» por wording más claro.
-- Revisó otros componentes de la interfaz para identificar oportunidades de
-  mejora en pantallas pequeñas.
-
-### Organización y documentación del proyecto - Claudia Pocasangre
-
-- Reorganizó el README para que funcione como presentación general de OmniFlow,
-  en lugar de duplicar instrucciones técnicas de instalación y despliegue.
-- Actualizó el índice maestro de documentación (`docs/INDEX.md`) para facilitar
-  la navegación por los documentos del proyecto.
-- Actualizó y organizó la documentación de instalación y despliegue
-  (`docs/06_INSTALACION_DEPLOYMENT.md`).
-- Centralizó el detalle técnico en la carpeta `docs/`, manteniendo el README
-  como punto de entrada para conocer el propósito, las funcionalidades, la
-  arquitectura y la organización del proyecto.
-
-### Desarrollo adicional - Adrian Hernandez
-
-- Apoyo en la integración de componentes y pruebas de usabilidad del sistema.
-- Revisión general de código y alineación con las guías del repositorio.
-
-## Documentación
-
-Consulta el [índice general de documentación](./docs/INDEX.md) para navegar por
-guías de uso, arquitectura, instalación, validación, riesgos, Supabase y
-material de asistencia de IA. Los documentos técnicos conservan el detalle de
-implementación para evitar duplicarlo aquí.
-
-## Inicio local
-
-Se requiere Node.js, npm, acceso al proyecto Supabase correspondiente y sus
-variables de entorno. Consulta la [guía de instalación y despliegue](./docs/06_INSTALACION_DEPLOYMENT.md)
-para los requisitos y la configuración antes de iniciar:
-
-```bash
-npm install
-npm run dev
-```
-
-La aplicación se sirve por defecto en `http://localhost:3000`.
+Si cambian las responsabilidades, actualiza este listado con el nombre y rol acordados por el equipo.
