@@ -6,17 +6,17 @@ OmniFlow centraliza la asignación y el seguimiento de tareas operativas. Cada p
 
 ## 🧭 Índice
 
-- [Resumen](#resumen)
-- [Funciones y roles](#funciones-y-roles)
-- [Arquitectura](#arquitectura)
-- [Inicio local](#inicio-local)
-- [Comandos](#comandos)
-- [Documentación del proyecto](#documentación-del-proyecto)
-- [Validación y seguridad](#validación-y-seguridad)
-- [Historial](#historial)
-- [Equipo / Autores](#equipo--autores)
+- [📌 Resumen](#resumen)
+- [✨ Funciones y roles](#funciones-y-roles)
+- [🏗️ Arquitectura](#arquitectura)
+- [🛠️ Inicio local](#inicio-local)
+- [⌨️ Comandos](#comandos)
+- [📚 Documentación del proyecto](#documentación-del-proyecto)
+- [✅ Validación y seguridad](#validación-y-seguridad)
+- [📝 Historial](#historial)
+- [👥 Equipo y autores](#equipo-y-autores)
 
-## 📌 Resumen
+## Resumen
 
 | Dato | Estado |
 | --- | --- |
@@ -26,7 +26,7 @@ OmniFlow centraliza la asignación y el seguimiento de tareas operativas. Cada p
 | Interfaz | React `^18.3.0`, JavaScript y CSS Modules |
 | Servicios | Supabase Auth, base de datos, Storage y Realtime |
 
-## ✨ Funciones y roles
+## Funciones y roles
 
 La aplicación permite organizar tareas, responsables, estados, prioridades, fechas, comentarios y evidencias. También incluye catálogos configurables y alertas directas de administración a usuarios.
 
@@ -58,7 +58,7 @@ Las guías por rol son referencias complementarias: contrasta sus pasos con la i
 
 > [Nota del equipo: añadir aquí una decisión o aprendizaje concreto sobre cómo quieren organizar el seguimiento diario de tareas.]
 
-## 🏗️ Arquitectura
+## Arquitectura
 
 El proyecto usa Pages Router y organiza la aplicación en `src/pages` (páginas y API routes), `src/components`, `src/context`, `src/hooks`, `src/lib`, `src/styles` y `src/utils`.
 
@@ -66,7 +66,7 @@ La autenticación usa Supabase; las API routes validan identidad y permisos en s
 
 > [Nota del equipo: documentar aquí las decisiones de arquitectura que deban mantenerse al incorporar nuevas rutas o permisos.]
 
-## 🛠️ Inicio local
+## Inicio local
 
 Requiere Node.js y npm, además de un proyecto Supabase configurado. Instala dependencias con `npm install`, crea `.env.local` a partir de `.env.example` y completa sus valores; inicia con `npm run dev`.
 
@@ -74,7 +74,7 @@ No publiques `.env.local` ni expongas `SUPABASE_SERVICE_ROLE_KEY` en el cliente.
 
 La [guía de instalación y despliegue](./docs/06_INSTALACION_DEPLOYMENT.md) contiene pasos adicionales, pero algunas instrucciones y ejemplos pueden no corresponder al estado actual. Verifica los comandos en `package.json`, las variables en `.env.example` y el esquema en `migration/README.md` antes de seguirlos.
 
-## ⌨️ Comandos
+## Comandos
 
 | Comando | Uso |
 | --- | --- |
@@ -84,7 +84,7 @@ La [guía de instalación y despliegue](./docs/06_INSTALACION_DEPLOYMENT.md) con
 | `npm run lint` | Ejecuta ESLint sobre `src` |
 | `npm test` | Ejecuta las pruebas con Vitest |
 
-## 📚 Documentación del proyecto
+## Documentación del proyecto
 
 El [índice maestro](./docs/09_INDICE_MAESTRO.md) reúne la documentación disponible. Atajos por tema:
 
@@ -103,17 +103,17 @@ El [índice maestro](./docs/09_INDICE_MAESTRO.md) reúne la documentación dispo
 
 Los documentos de análisis y las guías por rol pueden conservar observaciones históricas o pasos no vigentes. Usa `docs/00_ESTADO_ACTUAL.md` y el código como referencia antes de tomar decisiones técnicas.
 
-## ✅ Validación y seguridad
+## Validación y seguridad
 
 Antes de integrar cambios, ejecuta `npm run lint`, `npm run build` y `npm test`. Para cambios de acceso, valida los tres roles y sus límites con las [guías de validación](./docs/11_GUIA_VALIDACION_RAPIDA.md).
 
 El último informe documentado de `npm audit` corresponde al 27 de abril de 2026; no debe interpretarse como un resultado actualizado. Revisa [el informe](./docs/13_VULNERABILIDADES_ACTUALES.md) y los [pendientes de seguridad de Supabase](./migration/README.md) para conocer su fecha y contexto.
 
-## 📝 Historial
+## Historial
 
 Los cambios publicados se registran en [CHANGELOG.md](./CHANGELOG.md). La línea de versiones anterior se conserva en [CHANGELOG_HISTORICO.md](./CHANGELOG_HISTORICO.md).
 
-## 👥 Equipo / Autores
+## Equipo y autores
 
 - **Christian Melendez** — Base de datos y mantenimiento técnico
 - **Elizabeth Guevara** — Catálogos, permisos y gestión de tareas
