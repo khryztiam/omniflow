@@ -1,7 +1,5 @@
 # Usuarios iniciales de OmniFlow
 
-Proyecto Supabase: `cqqcyqfmjphvdusgxbaq` (`Tarea Final Kodigo`).
-
 La pantalla de inicio recibe el nombre de usuario y agrega el dominio
 `@omniflow.com` configurado en el proyecto. Las cuentas iniciales son:
 
@@ -18,6 +16,10 @@ Las cuentas están confirmadas en Supabase Auth y sus perfiles están en
 contraseñas iniciales no se guardan en el repositorio; deben compartirse por un
 canal seguro y cambiarse después del primer acceso.
 
-Solo se sembraron los tres roles requeridos y los cinco usuarios. Para empezar
-a crear tareas, todavía deben agregarse los catálogos de países, locales,
-estados de tarea y prioridades.
+En el aprovisionamiento inicial solo se sembraron los tres roles requeridos y
+los cinco usuarios; los catálogos operativos se gestionan por separado. Antes
+de crear tareas, verifica que existan países, locales y los valores base de
+estados y prioridades. La migración
+`migration/20261112_seed_catalogos_tareas.sql` contiene los valores base de
+estados y prioridades. Después, el administrador puede ampliar esos catálogos
+desde `/admin/gestion` con los valores que requiera el equipo.

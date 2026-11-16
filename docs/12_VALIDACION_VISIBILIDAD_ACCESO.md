@@ -333,5 +333,3 @@ Formato para documentar problemas:
 ```
 
 ---
-
-**Última actualización**: 25 de abril de 2026

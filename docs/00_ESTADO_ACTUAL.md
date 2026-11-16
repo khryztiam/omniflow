@@ -1,14 +1,16 @@
-# OmniFlow - Estado actual del proyecto
+# OmniFlow - Resumen tecnico de entrega
 
-**Fecha de revision:** 1 de mayo de 2026
-**Version de la app:** `1.0.0`
-**Fuente principal:** codigo actual en `src/`, `package.json` y auditoria `npm audit`
+**Corte documental:** 15 de noviembre de 2026
+**Versión declarada en `package.json`:** `1.2.0`
+**Estado:** candidata local no publicada; promoción a producción pendiente.
 
 ---
 
 ## Resumen
 
-OmniFlow es una aplicacion web para organizar, asignar y dar seguimiento a tareas de equipos de TI. Hoy opera con tres roles activos: **admin**, **supervisor** y **user**.
+OmniFlow es una aplicacion web privada para organizar, asignar y dar seguimiento
+a tareas de equipos de trabajo. La aplicacion contempla tres roles activos:
+**admin**, **supervisor** y **user**.
 
 La app usa **Next.js con Pages Router**, **JavaScript**, **Supabase**, **CSS Modules**, **React Icons** y **Lucide React**.
 
@@ -30,7 +32,8 @@ La app usa **Next.js con Pages Router**, **JavaScript**, **Supabase**, **CSS Mod
 
 - `/admin/dashboard`: tablero global por region, carga por responsable, estado global, riesgo actual y alertas.
 - `/admin/estadisticas`: analisis del portafolio de tareas, graficos y lectura por fechas.
-- `/admin/gestion`: paises, locales y usuarios.
+- `/admin/gestion`: paises, locales, departamentos, usuarios y catalogos
+  configurables de estados y prioridades.
 - `/admin/tareas`: gestion global de tareas, filtros, evidencias y comentarios.
 - `/admin/asignaciones`: asignacion centralizada.
 
@@ -56,7 +59,8 @@ La app usa **Next.js con Pages Router**, **JavaScript**, **Supabase**, **CSS Mod
 - Carga de perfil desde `usuarios`, incluyendo rol y local.
 - Redireccion por rol desde `/`.
 - Proteccion de rutas con `useAdmin`, `useSupervisor` y `useUser`.
-- APIs internas para tareas, usuarios, locales, paises, evidencias y comentarios.
+- APIs internas para tareas, usuarios, locales, paises, estados, prioridades,
+  evidencias y comentarios.
 - Realtime en cambios de `tareas` para admin, user y supervisor.
 - Alertas admin -> user mediante `alertas_usuario`.
 - Subida de evidencias al bucket `evidencias-tareas`.
@@ -83,6 +87,11 @@ Funciones/RPC relevantes:
 
 - `confirmar_alerta_usuario`
 
+Los catálogos `estados_tarea` y `prioridades` se pueden ampliar desde
+`/admin/gestion`. Los valores base con semántica interna mantienen sus nombres;
+`completado` conserva la lógica de cierre. Los valores personalizados son
+opcionales y sus colores se muestran en etiquetas de tareas.
+
 ---
 
 ## Tecnologias
@@ -107,52 +116,47 @@ Funciones/RPC relevantes:
 
 - El cliente usa `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
 - El backend y scripts usan `SUPABASE_SERVICE_ROLE_KEY`.
-- La validacion de permisos se hace en rutas protegidas, API routes y Supabase/RLS.
-- Las APIs actuales leen el JWT y luego consultan `usuarios` para confirmar rol y alcance.
+- Las API routes validan el JWT mediante `supabaseAdmin.auth.getUser(token)` y
+  buscan el perfil por el UUID autenticado; RLS sigue siendo una capa adicional.
+- El rol y el alcance se vuelven a comprobar en servidor antes de las
+  operaciones protegidas.
 - Para datos sensibles, mantener validacion en servidor y RLS estricto.
 
 ---
 
-## Vulnerabilidades actuales
+## Deuda tecnica residual y alcance de validacion
 
-`npm audit --json` ejecutado el 27 de abril de 2026 reporta:
+- La suite automatizada existente cubre autenticacion: en la revision de esta
+  base, `npm test -- --run` ejecutó 6 pruebas en un archivo y todas pasaron.
+  No hay evidencia equivalente de cobertura integral de los flujos funcionales.
+- El frontend combina consultas directas a Supabase con API routes. Es un
+  patron existente que conviene mantener bajo revision para que las reglas de
+  acceso y negocio sean consistentes; no se registra como falla funcional
+  confirmada.
+- La validacion de operaciones de escritura y los flujos reales por rol debe
+  completarse en un entorno de prueba antes de autorizar una entrega.
+- `npm audit` reportó 29 entradas de paquetes afectados en el árbol completo,
+  incluidas 4 críticas; `npm audit --omit=dev` reportó 7 en producción,
+  incluida una crítica en `next`. No se actualizaron dependencias; los detalles
+  están en [la auditoría de dependencias](13_VULNERABILIDADES_ACTUALES.md).
+  La promoción a producción debe esperar la corrección y revalidación de estos
+  hallazgos.
+- Validación local del 15 de noviembre de 2026: `npm test -- --run` pasó las 6
+  pruebas y `npm run build` completó. `npm run lint` falló con 24 errores y 14
+  advertencias en 13 archivos de `src`; no se modificó código de aplicación en
+  esta etapa.
+- La promoción también debe esperar que lint pase. Los resultados detallados
+  de seguridad y dependencias se mantienen en sus documentos especializados.
 
-- 7 vulnerabilidades moderadas.
-- 0 altas.
-- 0 criticas.
+Esta seccion describe brechas de validacion y mantenibilidad, no fallos
+confirmados de la aplicacion. No implica aprobacion de despliegue a produccion.
 
-Avisos especificos:
+## Criterios de entrega
 
-- `postcss` via `next`: `GHSA-qx2v-qp2m-jg93`.
-- `esbuild` via `vite`: `GHSA-67mh-4wv8-2f99`.
-- `vite` via `vitest`: `GHSA-4w7w-66w2-5vf9`.
-- `vitest`, `@vitest/ui` y `vite-node` heredan avisos de la cadena Vite.
-
-Recomendacion: no aplicar `npm audit fix --force` sin validar build, login, rutas por rol, evidencias y realtime.
-
----
-
-## Documentos historicos movidos fuera de Git
-
-Algunos documentos antiguos mencionaban supervisor como futuro, recomendaban migrar a TypeScript o describian cifras de roadmap que ya no coinciden con el estado actual. Se conservaron localmente en `.analysis/root-md-historico/`, carpeta ignorada por Git:
-
-- `ANALISIS_DISCREPANCIAS_v2.md`
-- `ARQUITECTURA.md`
-- `CLAUDE.md`
-- Guia de usuarios historica archivada fuera de la documentacion vigente.
-- `INSTRUCCIONES_USO.md`
-- `INSTRUCCIONES_USO_v2.md`
-- `SEGURIDAD_AUDIT.md`
-- `supabase-mcp-autoconfig.md`
-
-La referencia vigente queda en `README.md`, este documento y las guias dentro de `docs/`.
-
----
-
-## Validacion minima recomendada
-
-1. `npm run lint`
-2. `npm run build`
-3. `npm test`
-4. `npm audit`
-5. Prueba manual con admin, supervisor y user.
+1. Ejecutar `npm run lint`, `npm test -- --run` y `npm run build`.
+2. Revisar dependencias en `docs/13_VULNERABILIDADES_ACTUALES.md`.
+3. Confirmar esquema, permisos y configuracion del entorno en
+   `migration/README.md` y `SUPABASE_ESQUEMA_Y_FLUJOS.md`.
+4. Probar login, permisos y tareas con los tres roles, incluyendo escrituras
+   controladas, comentarios, evidencias, alertas y Realtime.
+5. Registrar commit, entorno y resultados antes de promover una version.

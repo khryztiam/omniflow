@@ -19,6 +19,7 @@ import {
   FiRefreshCw,
   FiX,
 } from 'react-icons/fi';
+import { obtenerEstiloVineta } from '@utils/formateo';
 
 export default function AdminDashboard() {
   const { cargando: cargandoAuth } = useAdmin();
@@ -189,7 +190,7 @@ export default function AdminDashboard() {
         supabase.from('locales').select('id, nombre, pais_id'),
         supabase.from('usuarios').select('id, nombre_completo, email'),
         supabase.from('estados_tarea').select('id, nombre, color_hex'),
-        supabase.from('prioridades').select('id, nombre'),
+        supabase.from('prioridades').select('id, nombre, color_hex'),
       ]);
 
       const tareasIds = (tareasData || []).map((tarea) => tarea.id);
@@ -1207,12 +1208,18 @@ export default function AdminDashboard() {
                                 className={obtenerColorPrioridad(
                                   tarea.prioridades?.nombre
                                 )}
+                                style={obtenerEstiloVineta(
+                                  tarea.prioridades?.color_hex
+                                )}
                               >
                                 {normalizarEtiqueta(tarea.prioridades?.nombre)}
                               </span>
                               <span
                                 className={obtenerColorEstado(
                                   tarea.estados?.nombre
+                                )}
+                                style={obtenerEstiloVineta(
+                                  tarea.estados?.color_hex
                                 )}
                               >
                                 {normalizarEtiqueta(tarea.estados?.nombre)}

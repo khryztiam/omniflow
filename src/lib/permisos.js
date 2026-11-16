@@ -117,7 +117,7 @@ export const obtenerRutaPrincipal = (usuarioDetalles) => {
     return '/supervisor/tareas';
   }
   if (esUser(usuarioDetalles)) {
-    return '/user/mis-tareas';
+    return '/user/dashboard';
   }
   return '/login';
 };

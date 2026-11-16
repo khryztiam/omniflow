@@ -1,7 +1,8 @@
 .contenedorTabla {
   background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
   border-radius: 12px;
-  overflow: hidden;
+  max-width: 100%;
+  overflow-x: auto;
   border: 1px solid #e2e8f0;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
@@ -14,7 +15,11 @@
 
 .tabla thead {
   background:
-    linear-gradient(90deg, rgba(14, 165, 233, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%),
+    linear-gradient(
+      90deg,
+      rgba(14, 165, 233, 0.08) 0%,
+      rgba(59, 130, 246, 0.04) 100%
+    ),
     linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
   border-bottom: 1px solid #d4e1ee;
 }

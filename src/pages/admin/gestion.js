@@ -8,6 +8,24 @@ import { supabase } from '@lib/supabase';
 import { FiGlobe, FiSettings, FiShield, FiUsers } from 'react-icons/fi';
 import styles from '@styles/GestionAdmin.module.css';
 
+// Catálogos de tareas gestionados desde esta pantalla
+const CATALOGOS_TAREA = {
+  estados: { endpoint: '/api/admin/estados', singular: 'estado' },
+  prioridades: { endpoint: '/api/admin/prioridades', singular: 'prioridad' },
+};
+
+const TITULOS_TIPO = {
+  paises: 'País',
+  locales: 'Local',
+  departamentos: 'Departamento',
+  estados: 'Estado',
+  prioridades: 'Prioridad',
+  usuarios: 'Usuario',
+};
+
+const formatearNombreCatalogo = (nombre) =>
+  (nombre || '').replaceAll('_', ' ').toUpperCase();
+
 export default function GestionAdmin() {
   const { cargando: cargandoAuth } = useAdmin();
   const montadoRef = useRef(true);
@@ -20,6 +38,8 @@ export default function GestionAdmin() {
   const [departamentos, setDepartamentos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [estados, setEstados] = useState([]);
+  const [prioridades, setPrioridades] = useState([]);
 
   // Modal y formulario
   const [modalAbierta, setModalAbierta] = useState(false);
@@ -66,20 +86,31 @@ export default function GestionAdmin() {
   const cargarDatos = useCallback(async () => {
     try {
       // Cargar datos desde APIs + obtener roles desde supabase
-      const [paisesRes, localesRes, departamentosRes, usuariosRes, rolesRes] =
-        await Promise.all([
-          callAPI('/api/admin/paises'),
-          callAPI('/api/admin/locales'),
-          callAPI('/api/admin/departamentos'),
-          callAPI('/api/admin/usuarios'),
-          supabase.from('roles').select('id, nombre').order('nombre'),
-        ]);
+      const [
+        paisesRes,
+        localesRes,
+        departamentosRes,
+        usuariosRes,
+        rolesRes,
+        estadosRes,
+        prioridadesRes,
+      ] = await Promise.all([
+        callAPI('/api/admin/paises'),
+        callAPI('/api/admin/locales'),
+        callAPI('/api/admin/departamentos'),
+        callAPI('/api/admin/usuarios'),
+        supabase.from('roles').select('id, nombre').order('nombre'),
+        callAPI(CATALOGOS_TAREA.estados.endpoint),
+        callAPI(CATALOGOS_TAREA.prioridades.endpoint),
+      ]);
 
       if (montadoRef.current) {
         setPaises(paisesRes.data || []);
         setLocales(localesRes.data || []);
         setDepartamentos(departamentosRes.data || []);
         setUsuarios(usuariosRes.data || []);
+        setEstados(estadosRes.data || []);
+        setPrioridades(prioridadesRes.data || []);
 
         if (rolesRes.error) throw rolesRes.error;
         setRoles(rolesRes.data || []);
@@ -116,7 +147,7 @@ export default function GestionAdmin() {
     setTipoFormulario(tipo);
     setModoFormulario('crear');
     setRegistroSeleccionado(null);
-    setValores({});
+    setValores(CATALOGOS_TAREA[tipo] ? { color_hex: '#2196F3' } : {});
     setError('');
     setModalAbierta(true);
   };
@@ -175,22 +206,16 @@ export default function GestionAdmin() {
   };
 
   const handleEliminar = async (registro, tipo = 'usuarios') => {
-    const nombreTipo =
-      tipo === 'departamentos'
-        ? 'departamento'
-        : tipo === 'locales'
-          ? 'local'
-          : tipo === 'paises'
-            ? 'país'
-            : 'usuario';
+    const nombreTipo = (TITULOS_TIPO[tipo] || 'Usuario').toLowerCase();
     if (!confirm(`¿Eliminar ${nombreTipo}?`)) return;
 
     try {
       setCargandoFormulario(true);
       setError('');
 
-      const endpoint =
-        tipo === 'usuarios'
+      const endpoint = CATALOGOS_TAREA[tipo]
+        ? `${CATALOGOS_TAREA[tipo].endpoint}/${registro.id}`
+        : tipo === 'usuarios'
           ? `/api/admin/usuarios/${registro.id}`
           : tipo === 'locales'
             ? `/api/admin/locales/${registro.id}`
@@ -203,7 +228,7 @@ export default function GestionAdmin() {
       refrescarDatos();
     } catch (err) {
       setError(
-        tipo === 'departamentos'
+        tipo === 'departamentos' || CATALOGOS_TAREA[tipo]
           ? err.message
           : obtenerMensajeError(err, 'eliminar')
       );
@@ -217,7 +242,14 @@ export default function GestionAdmin() {
       setCargandoFormulario(true);
       setError('');
 
-      if (tipoFormulario === 'paises') {
+      if (CATALOGOS_TAREA[tipoFormulario]) {
+        const { endpoint } = CATALOGOS_TAREA[tipoFormulario];
+        await callAPI(
+          modoFormulario === 'crear' ? endpoint : `${endpoint}/${valores.id}`,
+          modoFormulario === 'crear' ? 'POST' : 'PUT',
+          { nombre: valores.nombre, color_hex: valores.color_hex || '#cccccc' }
+        );
+      } else if (tipoFormulario === 'paises') {
         if (modoFormulario === 'crear') {
           await callAPI('/api/admin/paises', 'POST', {
             nombre: valores.nombre,
@@ -279,7 +311,7 @@ export default function GestionAdmin() {
       refrescarDatos();
     } catch (err) {
       setError(
-        tipoFormulario === 'departamentos'
+        tipoFormulario === 'departamentos' || CATALOGOS_TAREA[tipoFormulario]
           ? err.message
           : obtenerMensajeError(err, 'guardar')
       );
@@ -553,6 +585,63 @@ export default function GestionAdmin() {
               + Agregar Departamento
             </button>
           </div>
+
+          {/* Estados y Prioridades de tareas */}
+          {[
+            {
+              tipo: 'estados',
+              titulo: '🚦 Estados',
+              lista: estados,
+              vacio: 'No hay estados',
+              boton: '+ Agregar Estado',
+            },
+            {
+              tipo: 'prioridades',
+              titulo: '🔥 Prioridades',
+              lista: prioridades,
+              vacio: 'No hay prioridades',
+              boton: '+ Agregar Prioridad',
+            },
+          ].map(({ tipo, titulo, lista, vacio, boton }) => (
+            <div key={tipo} className={styles.seccion}>
+              <h4 className={styles.seccionTitulo}>{titulo}</h4>
+              <div className={styles.seccionContenido}>
+                {lista.length === 0 ? (
+                  <p
+                    style={{
+                      color: '#999',
+                      fontSize: '12px',
+                      gridColumn: '1/-1',
+                    }}
+                  >
+                    {vacio}
+                  </p>
+                ) : (
+                  lista.map((item) => (
+                    <div
+                      key={item.id}
+                      className={styles.itemSidebar}
+                      onClick={() => handleEditar(item, tipo)}
+                    >
+                      <div className={styles.itemCatalogo}>
+                        <span
+                          className={styles.muestraColor}
+                          style={{ backgroundColor: item.color_hex }}
+                        />
+                        <span>{formatearNombreCatalogo(item.nombre)}</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+              <button
+                className={styles.btnAgregarSidebar}
+                onClick={() => handleNuevo(tipo)}
+              >
+                {boton}
+              </button>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -560,34 +649,17 @@ export default function GestionAdmin() {
       <Modal
         abierto={modalAbierta}
         onCerrar={() => setModalAbierta(false)}
-        titulo={
-          modoFormulario === 'crear'
-            ? `Crear ${
-                tipoFormulario === 'paises'
-                  ? 'País'
-                  : tipoFormulario === 'locales'
-                    ? 'Local'
-                    : tipoFormulario === 'departamentos'
-                      ? 'Departamento'
-                      : 'Usuario'
-              }`
-            : `Editar ${
-                tipoFormulario === 'paises'
-                  ? 'País'
-                  : tipoFormulario === 'locales'
-                    ? 'Local'
-                    : tipoFormulario === 'departamentos'
-                      ? 'Departamento'
-                      : 'Usuario'
-              }`
-        }
+        titulo={`${modoFormulario === 'crear' ? 'Crear' : 'Editar'} ${
+          TITULOS_TIPO[tipoFormulario] || 'Usuario'
+        }`}
         onAceptar={handleGuardar}
         onEliminar={
           modoFormulario === 'editar' &&
           registroSeleccionado &&
           (tipoFormulario === 'paises' ||
             tipoFormulario === 'locales' ||
-            tipoFormulario === 'departamentos')
+            tipoFormulario === 'departamentos' ||
+            CATALOGOS_TAREA[tipoFormulario])
             ? () => handleEliminar(registroSeleccionado, tipoFormulario)
             : null
         }
@@ -597,143 +669,164 @@ export default function GestionAdmin() {
         <FormularioMulti
           modo={modoFormulario}
           campos={
-            tipoFormulario === 'departamentos'
+            CATALOGOS_TAREA[tipoFormulario]
               ? [
                   {
                     name: 'nombre',
-                    label: 'Nombre del departamento',
+                    label: `Nombre del ${CATALOGOS_TAREA[tipoFormulario].singular}`,
                     type: 'text',
                     required: true,
-                    placeholder: 'Ej: Recursos Humanos',
+                    placeholder:
+                      tipoFormulario === 'estados'
+                        ? 'Ej: En espera'
+                        : 'Ej: Crítica',
+                    ayuda:
+                      'Se guarda en minúsculas con guiones bajos. Los registros del sistema solo permiten cambiar el color.',
                   },
                   {
-                    name: 'local_ids',
-                    label: 'Locales donde existe',
-                    type: 'checkbox-group',
+                    name: 'color_hex',
+                    label: 'Color de la viñeta',
+                    type: 'color',
                     required: true,
-                    options: locales.map((local) => ({
-                      id: local.id,
-                      label: `${local.nombre} (${local.pais?.nombre || 'Sin país'})`,
-                    })),
-                    ayuda:
-                      'Puedes vincular el mismo departamento con varios locales.',
                   },
                 ]
-              : tipoFormulario === 'paises'
+              : tipoFormulario === 'departamentos'
                 ? [
                     {
                       name: 'nombre',
-                      label: 'Nombre del País',
+                      label: 'Nombre del departamento',
                       type: 'text',
                       required: true,
-                      placeholder: 'Ej: Colombia',
+                      placeholder: 'Ej: Recursos Humanos',
+                    },
+                    {
+                      name: 'local_ids',
+                      label: 'Locales donde existe',
+                      type: 'checkbox-group',
+                      required: true,
+                      options: locales.map((local) => ({
+                        id: local.id,
+                        label: `${local.nombre} (${local.pais?.nombre || 'Sin país'})`,
+                      })),
+                      ayuda:
+                        'Puedes vincular el mismo departamento con varios locales.',
                     },
                   ]
-                : tipoFormulario === 'locales'
+                : tipoFormulario === 'paises'
                   ? [
                       {
                         name: 'nombre',
-                        label: 'Nombre del local',
+                        label: 'Nombre del País',
                         type: 'text',
                         required: true,
-                        placeholder: 'Ej: Local Bogotá',
-                      },
-                      {
-                        name: 'pais_id',
-                        label: 'País',
-                        type: 'select',
-                        required: true,
-                        options: paises.map((p) => ({
-                          id: p.id,
-                          label: p.nombre,
-                        })),
+                        placeholder: 'Ej: Colombia',
                       },
                     ]
-                  : [
-                      {
-                        name: 'nombre_completo',
-                        label: 'Nombre Completo',
-                        type: 'text',
-                        required: true,
-                        placeholder: 'Ej: Juan Pérez',
-                        disabled: modoFormulario === 'editar',
-                      },
-                      {
-                        name: 'username',
-                        label: 'Usuario',
-                        type: 'text',
-                        required: modoFormulario === 'crear',
-                        placeholder: 'Ej: juan.perez',
-                        disabled: modoFormulario === 'editar',
-                        ayuda:
-                          'Se usará para crear el correo de acceso del usuario.',
-                        mostrarEn: ['crear'],
-                      },
-                      {
-                        name: 'password',
-                        label: 'Contraseña',
-                        type: 'password',
-                        required: modoFormulario === 'crear',
-                        placeholder:
-                          modoFormulario === 'crear'
-                            ? 'Ej: MinaT@123'
-                            : '(Dejar vacío para no cambiar)',
-                        ayuda:
-                          modoFormulario === 'crear'
-                            ? 'Contraseña inicial'
-                            : 'Dejar vacío para mantener la actual',
-                      },
-                      {
-                        name: 'rol_id',
-                        label: 'Rol',
-                        type: 'select',
-                        required: true,
-                        options: roles.map((r) => ({
-                          id: r.id,
-                          label:
-                            r.nombre.charAt(0).toUpperCase() +
-                            r.nombre.slice(1),
-                        })),
-                      },
-                      {
-                        name: 'local_id',
-                        label: 'Local Asignado',
-                        type: 'select',
-                        required: true,
-                        options: locales.map((p) => ({
-                          id: p.id,
-                          label: p.nombre,
-                        })),
-                      },
-                      {
-                        name: 'departamento_id',
-                        label: 'Departamento',
-                        type: 'select',
-                        options: departamentos
-                          .filter((departamento) =>
-                            departamento.locales_departamentos?.some(
-                              (relacion) =>
-                                relacion.local_id === valores.local_id
-                            )
-                          )
-                          .map((departamento) => ({
-                            id: departamento.id,
-                            label: departamento.nombre,
+                  : tipoFormulario === 'locales'
+                    ? [
+                        {
+                          name: 'nombre',
+                          label: 'Nombre del local',
+                          type: 'text',
+                          required: true,
+                          placeholder: 'Ej: Local Bogotá',
+                        },
+                        {
+                          name: 'pais_id',
+                          label: 'País',
+                          type: 'select',
+                          required: true,
+                          options: paises.map((p) => ({
+                            id: p.id,
+                            label: p.nombre,
                           })),
-                        ayuda:
-                          'Opcional. Solo aparecen departamentos vinculados al local seleccionado.',
-                      },
-                      {
-                        name: 'estado',
-                        label: 'Estado',
-                        type: 'select',
-                        options: [
-                          { id: 'activo', label: 'Activo' },
-                          { id: 'inactivo', label: 'Inactivo' },
-                        ],
-                        mostrarEn: ['editar'],
-                      },
-                    ]
+                        },
+                      ]
+                    : [
+                        {
+                          name: 'nombre_completo',
+                          label: 'Nombre Completo',
+                          type: 'text',
+                          required: true,
+                          placeholder: 'Ej: Juan Pérez',
+                          disabled: modoFormulario === 'editar',
+                        },
+                        {
+                          name: 'username',
+                          label: 'Usuario',
+                          type: 'text',
+                          required: modoFormulario === 'crear',
+                          placeholder: 'Ej: juan.perez',
+                          disabled: modoFormulario === 'editar',
+                          ayuda:
+                            'Se usará para crear el correo de acceso del usuario.',
+                          mostrarEn: ['crear'],
+                        },
+                        {
+                          name: 'password',
+                          label: 'Contraseña',
+                          type: 'password',
+                          required: modoFormulario === 'crear',
+                          placeholder:
+                            modoFormulario === 'crear'
+                              ? 'Ej: MinaT@123'
+                              : '(Dejar vacío para no cambiar)',
+                          ayuda:
+                            modoFormulario === 'crear'
+                              ? 'Contraseña inicial'
+                              : 'Dejar vacío para mantener la actual',
+                        },
+                        {
+                          name: 'rol_id',
+                          label: 'Rol',
+                          type: 'select',
+                          required: true,
+                          options: roles.map((r) => ({
+                            id: r.id,
+                            label:
+                              r.nombre.charAt(0).toUpperCase() +
+                              r.nombre.slice(1),
+                          })),
+                        },
+                        {
+                          name: 'local_id',
+                          label: 'Local Asignado',
+                          type: 'select',
+                          required: true,
+                          options: locales.map((p) => ({
+                            id: p.id,
+                            label: p.nombre,
+                          })),
+                        },
+                        {
+                          name: 'departamento_id',
+                          label: 'Departamento',
+                          type: 'select',
+                          options: departamentos
+                            .filter((departamento) =>
+                              departamento.locales_departamentos?.some(
+                                (relacion) =>
+                                  relacion.local_id === valores.local_id
+                              )
+                            )
+                            .map((departamento) => ({
+                              id: departamento.id,
+                              label: departamento.nombre,
+                            })),
+                          ayuda:
+                            'Opcional. Solo aparecen departamentos vinculados al local seleccionado.',
+                        },
+                        {
+                          name: 'estado',
+                          label: 'Estado',
+                          type: 'select',
+                          options: [
+                            { id: 'activo', label: 'Activo' },
+                            { id: 'inactivo', label: 'Inactivo' },
+                          ],
+                          mostrarEn: ['editar'],
+                        },
+                      ]
           }
           valores={valores}
           onCambio={handleCambioFormulario}

@@ -55,6 +55,24 @@ export const obtenerColorPrioridad = (prioridad) => {
 };
 
 /**
+ * Estilo inline de una viñeta (badge) a partir del color_hex guardado en BD
+ * (estados_tarea.color_hex / prioridades.color_hex).
+ * Fondo y borde sólidos con el color de BD, texto blanco.
+ * Si no hay color válido devuelve undefined y se usa el estilo CSS existente.
+ */
+export const obtenerEstiloVineta = (colorHex) => {
+  if (typeof colorHex !== 'string' || !/^#[0-9A-Fa-f]{6}$/.test(colorHex)) {
+    return undefined;
+  }
+
+  return {
+    backgroundColor: colorHex,
+    borderColor: colorHex,
+    color: '#ffffff',
+  };
+};
+
+/**
  * Determinar alerta visual según estado y fechas
  */
 export const obtenerAlertaVisual = (tarea) => {

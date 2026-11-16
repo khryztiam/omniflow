@@ -109,8 +109,8 @@ export default async function handler(req, res) {
       .select(
         `
         *,
-        prioridad:prioridades(id, nombre),
-        estado:estados_tarea(id, nombre),
+        prioridad:prioridades(id, nombre, color_hex),
+        estado:estados_tarea(id, nombre, color_hex),
         asignado_a_user:usuarios!asignado_a(id, nombre_completo),
         creador:usuarios!creado_por(id, nombre_completo),
         local:locales(id, nombre)

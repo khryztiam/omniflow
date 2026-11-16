@@ -175,3 +175,25 @@
     width: 100%;
   }
 }
+
+.campoColor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.inputColor {
+  width: 48px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.valorColor {
+  font-family: monospace;
+  font-size: 13px;
+  color: #334155;
+}

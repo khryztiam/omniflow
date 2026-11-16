@@ -22,8 +22,8 @@ export default async function handler(req, res) {
         .select(
           `
           *,
-          estado:estados_tarea(id, nombre),
-          prioridad:prioridades(id, nombre),
+          estado:estados_tarea(id, nombre, color_hex),
+          prioridad:prioridades(id, nombre, color_hex),
           local:locales(id, nombre, pais:paises(id, nombre)),
           creado_por_user:usuarios!creado_por(id, nombre_completo),
           supervisado_por_user:usuarios!supervisado_por(id, nombre_completo),
@@ -87,8 +87,8 @@ export default async function handler(req, res) {
         .select(
           `
           *,
-          estado:estados_tarea(id, nombre),
-          prioridad:prioridades(id, nombre)
+          estado:estados_tarea(id, nombre, color_hex),
+          prioridad:prioridades(id, nombre, color_hex)
         `
         );
 

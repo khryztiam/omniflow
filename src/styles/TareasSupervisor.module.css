@@ -548,6 +548,16 @@
     padding: 20px;
   }
 
+  .hero > :first-child {
+    flex: 0 1 auto;
+    width: 100%;
+  }
+
+  .heroFilterCard {
+    width: 100%;
+    min-width: 0;
+  }
+
   .heroActions {
     width: 100%;
     min-width: 0;

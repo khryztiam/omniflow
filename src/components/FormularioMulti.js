@@ -62,6 +62,20 @@ export default function FormularioMulti({
                   className={styles.input}
                   required={campo.required && esEditando}
                 />
+              ) : campo.type === 'color' ? (
+                <div className={styles.campoColor}>
+                  <input
+                    type="color"
+                    name={campo.name}
+                    value={valores[campo.name] || '#cccccc'}
+                    onChange={(e) => onCambio(campo.name, e.target.value)}
+                    disabled={!esEditando || campo.disabled}
+                    className={styles.inputColor}
+                  />
+                  <span className={styles.valorColor}>
+                    {(valores[campo.name] || '#cccccc').toUpperCase()}
+                  </span>
+                </div>
               ) : campo.type === 'textarea' ? (
                 <textarea
                   name={campo.name}

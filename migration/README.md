@@ -48,9 +48,8 @@ incrementales en orden:
 2. `20261111_local_policy_alias_cleanup.sql` limpia alias heredados en dos
    politicas RLS sin cambiar sus condiciones de acceso.
 
-Ambas migraciones se aplicaron al proyecto `Tarea Final Kodigo` mediante
-Supabase MCP el 11 de noviembre de 2026. Usan `ALTER ... RENAME` para conservar
-los registros y las relaciones existentes.
+Ambas migraciones se aplicaron el 11 de noviembre de 2026. Usan
+`ALTER ... RENAME` para conservar los registros y las relaciones existentes.
 
 ## Departamentos asociados a locales
 
@@ -72,14 +71,17 @@ se conserva para validar que el departamento este habilitado para el local.
 La relacion directa permite a PostgREST resolver el departamento en las
 consultas de perfiles; esas consultas identifican explicitamente esta FK.
 
-`20261112_seed_catalogos_tareas.sql` agrega de forma idempotente los estados y
-prioridades que utiliza la aplicacion cuando esos registros no existen. Puede
-ejecutarse en una instalacion nueva o en una base existente desde el SQL Editor
-de Supabase o con `psql`.
+`20261112_seed_catalogos_tareas.sql` agrega de forma idempotente los valores
+base de estados y prioridades que necesita la logica actual de la aplicacion.
+Son valores iniciales reservados, no una lista cerrada: el administrador puede
+agregar opciones propias desde `/admin/gestion` sin una migracion de esquema.
+Antes de crear tareas, verifica que los valores base existan; la disponibilidad
+del archivo no implica que se haya aplicado en cada entorno. Puede ejecutarse
+en una instalacion nueva o en una base existente desde el SQL Editor de Supabase
+o con `psql`.
 
-Las dos migraciones de departamentos se aplicaron mediante Supabase MCP al
-proyecto `Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`) el 11 de noviembre de
-2026. La validacion posterior confirmo 12 tablas publicas y 40 politicas RLS.
+Las dos migraciones de departamentos se aplicaron el 11 de noviembre de 2026.
+La validacion posterior confirmo 12 tablas publicas y 40 politicas RLS.
 El catalogo de departamentos, las asociaciones con locales y las asignaciones
 departamentales de usuarios quedaron vacios; los cinco perfiles existentes no
 fueron modificados.
@@ -186,12 +188,11 @@ nombres, pero no los cuerpos SQL; por eso no se recrean ni se reproducen como
 migraciones versionadas. El snapshot actual de `schema.sql` es el artefacto
 para una instalacion limpia sin datos.
 
-## Aprovisionamiento inicial del proyecto de equipo
+## Aprovisionamiento inicial del entorno
 
-El 11 de noviembre de 2026 se aprovisiono mediante Supabase MCP el proyecto
-`Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`, region `us-east-1`). Este es el
-proyecto configurado en el `.env.local` local. El proyecto anterior
-`ITFlow Team` (`hmjxrtscfsgjqdfaqxiw`) se inspecciono, pero no se modifico.
+El 11 de noviembre de 2026 se aprovisiono el esquema de la aplicacion en el
+entorno Supabase configurado para el equipo. Las credenciales y los
+identificadores del entorno se administran fuera de este documento.
 
 Se verifico que el destino estaba vacio antes de aplicar el esquema. En el
 aprovisionamiento inicial, la estructura instalada tenia:
@@ -222,10 +223,13 @@ activas y sin local asignado. La lista se mantiene en
 [`docs/USUARIOS_INICIALES.md`](../docs/USUARIOS_INICIALES.md); las contrasenas
 no se guardan en el repositorio.
 
-No se cargaron paises, locales, departamentos, estados de tarea, prioridades,
-tareas, comentarios, evidencias ni alertas. Por eso, antes de crear tareas, el
-equipo debe agregar al menos los catalogos de estados, prioridades, paises y
-locales, y asignar un local a supervisor y usuarios segun corresponda.
+En el aprovisionamiento inicial no se cargaron paises, locales, departamentos,
+estados de tarea, prioridades, tareas, comentarios, evidencias ni alertas. La
+migracion `20261112_seed_catalogos_tareas.sql` ofrece los valores base
+requeridos para estados y prioridades; verifica si se aplico en el entorno
+objetivo. El administrador puede agregar valores personalizados en
+`/admin/gestion`. Antes de crear tareas tambien deben existir paises y locales,
+y asignarse un local a supervisor y usuarios segun corresponda.
 
 ### Validacion y pendientes de seguridad
 
@@ -255,4 +259,5 @@ parte del aprovisionamiento:
 
 Tambien hay que revisar en el Dashboard la configuracion administrada de Auth,
 redirect URLs, proveedores, SMTP, plantillas de correo y secretos del hosting.
-No se trasladaron configuraciones del proyecto anterior.
+Cada entorno debe configurar estos valores de forma independiente; no se
+almacenan credenciales ni secretos en este repositorio.

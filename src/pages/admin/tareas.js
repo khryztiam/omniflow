@@ -9,6 +9,7 @@ import {
   formatearFecha,
   obtenerTextoEstado,
   obtenerTextoPrioridad,
+  obtenerEstiloVineta,
 } from '@utils/formateo';
 import {
   FiCalendar,
@@ -86,24 +87,27 @@ export default function TareasAdmin() {
     return data.session.access_token;
   }, []);
 
-  const callAPI = useCallback(async (url, method = 'GET', body = null) => {
-    const token = await obtenerToken();
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: body ? JSON.stringify(body) : null,
-    });
+  const callAPI = useCallback(
+    async (url, method = 'GET', body = null) => {
+      const token = await obtenerToken();
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: body ? JSON.stringify(body) : null,
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.detail || error.error || response.statusText);
-    }
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.detail || error.error || response.statusText);
+      }
 
-    return response.json();
-  }, [obtenerToken]);
+      return response.json();
+    },
+    [obtenerToken]
+  );
 
   useEffect(() => {
     let activo = true;
@@ -434,7 +438,17 @@ export default function TareasAdmin() {
       label: 'Prioridad',
       ancho: '12%',
       sortable: true,
-      render: (val) => obtenerTextoPrioridad(val?.nombre) || '-',
+      render: (val) =>
+        val?.nombre ? (
+          <span
+            className={styles.vineta}
+            style={obtenerEstiloVineta(val.color_hex)}
+          >
+            {obtenerTextoPrioridad(val.nombre)}
+          </span>
+        ) : (
+          '-'
+        ),
       sortValue: (val) => obtenerTextoPrioridad(val?.nombre) || '',
     },
     {
@@ -458,7 +472,10 @@ export default function TareasAdmin() {
       ancho: '12%',
       sortable: true,
       render: (val) => (
-        <span className={styles[`estado-${val?.nombre}`]}>
+        <span
+          className={`${styles.vineta} ${styles[`estado-${val?.nombre}`] || ''}`}
+          style={obtenerEstiloVineta(val?.color_hex)}
+        >
           {obtenerTextoEstado(val?.nombre)}
         </span>
       ),

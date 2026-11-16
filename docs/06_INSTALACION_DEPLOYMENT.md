@@ -1,8 +1,4 @@
-# 🚀 OmniFlow — Guía de instalación y deployment
-
-**Versión:** 2.2 | **Fecha:** Abril 2026 | **Público:** DevOps, desarrolladores
-
----
+# OmniFlow — Guía de instalación y despliegue
 
 ## 📋 Requisitos previos
 
@@ -54,7 +50,7 @@ Docker:    20.10+ (opcional, para contenedor)
 
 ```bash
 # Clonar desde GitHub
-git clone https://github.com/tuempresa/omniflow.git
+git clone https://github.com/khryztiam/omniflow.git
 
 # Entrar al directorio
 cd omniflow
@@ -69,21 +65,10 @@ git branch
 # Instalar todas las dependencias
 npm install
 
-# Verificar que no hay vulnerabilidades críticas
-npm audit
-
-# Si hay vulnerabilidades:
-npm audit fix          # Intenta corregir automáticamente
-npm audit fix --force  # Fuerza actualizaciones (cuidado)
 ```
 
-**Salida esperada:**
-
-```
-added 287 packages in 45s
-
-up to date in 2m 3s
-```
+Consulta [la guía de auditoría de dependencias](../docs/13_VULNERABILIDADES_ACTUALES.md)
+para los resultados y el proceso de revisión vigente.
 
 ### Paso 3: Configurar variables de entorno
 
@@ -113,7 +98,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api
 
 # (Opcional) Envío de emails
 SENDGRID_API_KEY=SG.xxxxxxxxxxxx
-SENDGRID_FROM_EMAIL=noreply@empresa.com
 
 # (Opcional) Logging
 LOG_LEVEL=info
@@ -365,12 +349,18 @@ SEGURIDAD Y REALTIME
 
 ### Insertar datos iniciales
 
+Los estados y prioridades del siguiente bloque son valores base recomendados,
+no una lista cerrada. Se pueden agregar opciones propias desde
+`/admin/gestion`. Los valores base conservan su nombre porque la aplicación
+asocia lógica interna con ellos; los colores se pueden personalizar. Para el
+esquema vigente, consulta `migration/schema.sql`.
+
 ```sql
 -- Insertar roles
 INSERT INTO roles (nombre, descripcion) VALUES
   ('admin', 'Administrador del sistema'),
   ('supervisor', 'Supervisor de local'),
-  ('user', 'Usuario operario');
+  ('user', 'Usuario');
 
 -- Insertar prioridades
 INSERT INTO prioridades (nombre, orden, color_hex) VALUES
@@ -741,7 +731,6 @@ PostgreSQL (replicado)
 [ ] CORS correctamente configurado
 [ ] Validación de input en backend
 [ ] OWASP Top 10 checklist revisado
-[ ] Penetration test (en roadmap)
 ```
 
 ---
@@ -759,13 +748,3 @@ o: support@supabase.com
 Dashboard → Help → Contact support
 o: https://vercel.com/support
 ```
-
-**Problema con OmniFlow mismo:**
-```
-GitHub Issues: github.com/tuempresa/omniflow/issues
-```
-
----
-
-**Última actualización:** 22/04/2026  
-**Próxima revisión:** Q3 2026 (cuando implementemos CI/CD completo)

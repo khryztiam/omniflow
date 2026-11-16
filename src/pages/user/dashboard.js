@@ -6,6 +6,7 @@ import { supabase } from '@lib/supabase';
 import { useAuth } from '@context/AuthContext';
 import { FiFilter, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
 import styles from '@styles/DashboardUser.module.css';
+import { obtenerEstiloVineta } from '@utils/formateo';
 
 export default function UserDashboard() {
   const { cargando: cargandoAuth } = useUser();
@@ -512,10 +513,14 @@ export default function UserDashboard() {
                   <div className={styles.cardBadges}>
                     <span
                       className={obtenerColorPrioridad(tarea.prioridad?.nombre)}
+                      style={obtenerEstiloVineta(tarea.prioridad?.color_hex)}
                     >
                       {normalizarEtiqueta(tarea.prioridad?.nombre)}
                     </span>
-                    <span className={obtenerColorEstado(tarea.estado?.nombre)}>
+                    <span
+                      className={obtenerColorEstado(tarea.estado?.nombre)}
+                      style={obtenerEstiloVineta(tarea.estado?.color_hex)}
+                    >
                       {normalizarEtiqueta(tarea.estado?.nombre)}
                     </span>
                   </div>
