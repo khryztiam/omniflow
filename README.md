@@ -105,38 +105,40 @@ Antes de integrar cambios, ejecuta `npm run lint`, `npm run build` y `npm test`.
 
 ## Equipo y autores
 
+
 <div align="center">
+  <h3>Un gran proyecto, un gran equipo 🚀</h3>
   <table>
     <tr>
-      <td align="center">
-        <img src="https://github.com/khryztiam.png" width="110" alt="Foto de perfil de Christian Meléndez" style="border-radius: 50%;" />
+      <td align="center" valign="top" width="20%">
+        <img src="./public/team/christian.jpg" width="160" alt="Avatar ilustrado de Christian Meléndez" />
         <br /><strong>Christian Meléndez</strong><br />
-        <img src="https://img.shields.io/badge/Role-Database%20%26%20Ops-2563EB?style=for-the-badge" alt="Database &amp; Ops" />
-        <br /><a href="https://github.com/khryztiam"><img src="https://img.shields.io/badge/GitHub-Ver%20perfil-181717?style=for-the-badge&amp;logo=github" alt="Ver perfil de Christian en GitHub" /></a>
+        <img src="https://img.shields.io/badge/Database%20%26%20Ops-2563EB?style=for-the-badge" alt="Database &amp; Ops" />
+        <br /><a href="https://github.com/khryztiam"><img src="https://img.shields.io/badge/khryztiam-181717?style=flat&amp;logo=github&amp;logoColor=white" alt="@khryztiam en GitHub" /></a>
       </td>
-      <td align="center">
-        <img src="https://github.com/lilitbeth.png" width="110" alt="Foto de perfil de Elizabeth Guevara" style="border-radius: 50%;" />
+      <td align="center" valign="top" width="20%">
+        <img src="./public/team/elizabeth.jpg" width="160" alt="Avatar ilustrado de Elizabeth Guevara" />
         <br /><strong>Elizabeth Guevara</strong><br />
-        <img src="https://img.shields.io/badge/Role-Logic%20%26%20Modules-7C3AED?style=for-the-badge" alt="Logic &amp; Modules" />
-        <br /><a href="https://github.com/lilitbeth"><img src="https://img.shields.io/badge/GitHub-Ver%20perfil-181717?style=for-the-badge&amp;logo=github" alt="Ver perfil de Elizabeth en GitHub" /></a>
+        <img src="https://img.shields.io/badge/Logic%20%26%20Modules-7C3AED?style=for-the-badge" alt="Logic &amp; Modules" />
+        <br /><a href="https://github.com/lilitbeth"><img src="https://img.shields.io/badge/lilitbeth-181717?style=flat&amp;logo=github&amp;logoColor=white" alt="@lilitbeth en GitHub" /></a>
       </td>
-      <td align="center">
-        <img src="https://github.com/JokerBeast.png" width="110" alt="Foto de perfil de Angel Vega" style="border-radius: 50%;" />
+      <td align="center" valign="top" width="20%">
+        <img src="./public/team/angel.jpg" width="160" alt="Avatar ilustrado de Angel Vega" />
         <br /><strong>Angel Vega</strong><br />
-        <img src="https://img.shields.io/badge/Role-Mobile%20%26%20UX-059669?style=for-the-badge" alt="Mobile &amp; UX" />
-        <br /><a href="https://github.com/JokerBeast"><img src="https://img.shields.io/badge/GitHub-Ver%20perfil-181717?style=for-the-badge&amp;logo=github" alt="Ver perfil de Angel en GitHub" /></a>
+        <img src="https://img.shields.io/badge/Mobile%20%26%20UX-059669?style=for-the-badge" alt="Mobile &amp; UX" />
+        <br /><a href="https://github.com/JokerBeast"><img src="https://img.shields.io/badge/JokerBeast-181717?style=flat&amp;logo=github&amp;logoColor=white" alt="@JokerBeast en GitHub" /></a>
       </td>
-      <td align="center">
-        <img src="https://github.com/sofpoca.png" width="110" alt="Foto de perfil de Claudia Pocasangre" style="border-radius: 50%;" />
+      <td align="center" valign="top" width="20%">
+        <img src="./public/team/claudia-pocasangre.jpg" width="160" alt="Avatar ilustrado de Claudia Pocasangre" />
         <br /><strong>Claudia Pocasangre</strong><br />
-        <img src="https://img.shields.io/badge/Role-Docs%20%26%20Management-D97706?style=for-the-badge" alt="Docs &amp; Management" />
-        <br /><a href="https://github.com/sofpoca"><img src="https://img.shields.io/badge/GitHub-Ver%20perfil-181717?style=for-the-badge&amp;logo=github" alt="Ver perfil de Claudia en GitHub" /></a>
+        <img src="https://img.shields.io/badge/Docs%20%26%20Management-D97706?style=for-the-badge" alt="Docs &amp; Management" />
+        <br /><a href="https://github.com/sofpoca"><img src="https://img.shields.io/badge/sofpoca-181717?style=flat&amp;logo=github&amp;logoColor=white" alt="@sofpoca en GitHub" /></a>
       </td>
-      <td align="center">
-        <img src="https://github.com/axdhran.png" width="110" alt="Foto de perfil de Adrian Hernandez" style="border-radius: 50%;" />
+      <td align="center" valign="top" width="20%">
+        <img src="./public/team/adrian.jpg" width="160" alt="Avatar ilustrado de Adrian Hernandez" />
         <br /><strong>Adrian Hernandez</strong><br />
-        <img src="https://img.shields.io/badge/Role-QA%20%26%20Testing-DC2626?style=for-the-badge" alt="QA &amp; Testing" />
-        <br /><a href="https://github.com/axdhran"><img src="https://img.shields.io/badge/GitHub-Ver%20perfil-181717?style=for-the-badge&amp;logo=github" alt="Ver perfil de Adrian en GitHub" /></a>
+        <img src="https://img.shields.io/badge/QA%20%26%20Testing-DC2626?style=for-the-badge" alt="QA &amp; Testing" />
+        <br /><a href="https://github.com/axdhran"><img src="https://img.shields.io/badge/axdhran-181717?style=flat&amp;logo=github&amp;logoColor=white" alt="@axdhran en GitHub" /></a>
       </td>
     </tr>
   </table>
