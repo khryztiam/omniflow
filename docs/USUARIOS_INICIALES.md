@@ -1,7 +1,5 @@
 # Usuarios iniciales de OmniFlow
 
-Proyecto Supabase: `cqqcyqfmjphvdusgxbaq` (`Tarea Final Kodigo`).
-
 La pantalla de inicio recibe el nombre de usuario y agrega el dominio
 `@omniflow.com` configurado en el proyecto. Las cuentas iniciales son:
 

@@ -48,9 +48,8 @@ incrementales en orden:
 2. `20261111_local_policy_alias_cleanup.sql` limpia alias heredados en dos
    politicas RLS sin cambiar sus condiciones de acceso.
 
-Ambas migraciones se aplicaron al proyecto `Tarea Final Kodigo` mediante
-Supabase MCP el 11 de noviembre de 2026. Usan `ALTER ... RENAME` para conservar
-los registros y las relaciones existentes.
+Ambas migraciones se aplicaron el 11 de noviembre de 2026. Usan
+`ALTER ... RENAME` para conservar los registros y las relaciones existentes.
 
 ## Departamentos asociados a locales
 
@@ -81,9 +80,8 @@ del archivo no implica que se haya aplicado en cada entorno. Puede ejecutarse
 en una instalacion nueva o en una base existente desde el SQL Editor de Supabase
 o con `psql`.
 
-Las dos migraciones de departamentos se aplicaron mediante Supabase MCP al
-proyecto `Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`) el 11 de noviembre de
-2026. La validacion posterior confirmo 12 tablas publicas y 40 politicas RLS.
+Las dos migraciones de departamentos se aplicaron el 11 de noviembre de 2026.
+La validacion posterior confirmo 12 tablas publicas y 40 politicas RLS.
 El catalogo de departamentos, las asociaciones con locales y las asignaciones
 departamentales de usuarios quedaron vacios; los cinco perfiles existentes no
 fueron modificados.
@@ -190,12 +188,11 @@ nombres, pero no los cuerpos SQL; por eso no se recrean ni se reproducen como
 migraciones versionadas. El snapshot actual de `schema.sql` es el artefacto
 para una instalacion limpia sin datos.
 
-## Aprovisionamiento inicial del proyecto de equipo
+## Aprovisionamiento inicial del entorno
 
-El 11 de noviembre de 2026 se aprovisiono mediante Supabase MCP el proyecto
-`Tarea Final Kodigo` (`cqqcyqfmjphvdusgxbaq`, region `us-east-1`). Este es el
-proyecto configurado en el `.env.local` local. El proyecto anterior
-`ITFlow Team` (`hmjxrtscfsgjqdfaqxiw`) se inspecciono, pero no se modifico.
+El 11 de noviembre de 2026 se aprovisiono el esquema de la aplicacion en el
+entorno Supabase configurado para el equipo. Las credenciales y los
+identificadores del entorno se administran fuera de este documento.
 
 Se verifico que el destino estaba vacio antes de aplicar el esquema. En el
 aprovisionamiento inicial, la estructura instalada tenia:
@@ -262,4 +259,5 @@ parte del aprovisionamiento:
 
 Tambien hay que revisar en el Dashboard la configuracion administrada de Auth,
 redirect URLs, proveedores, SMTP, plantillas de correo y secretos del hosting.
-No se trasladaron configuraciones del proyecto anterior.
+Cada entorno debe configurar estos valores de forma independiente; no se
+almacenan credenciales ni secretos en este repositorio.

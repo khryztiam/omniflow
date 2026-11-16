@@ -1,9 +1,5 @@
 # 📊 OmniFlow — Documentación detallada de flujos
 
-**Versión:** 2.3 | **Fecha:** Abril 2026 | **Arquitecto de Software**
-
----
-
 ## 📑 Tabla de contenidos
 
 1. [Flujo de autenticación](#flujo-de-autenticación)
@@ -774,5 +770,3 @@ Admin combina /admin/dashboard + /admin/estadisticas + /admin/tareas
 | Ver dashboard          | /                  | Estadísticas  | < 2 seg                | Todos             |
 
 ---
-
-**Próxima actualización:** Q2 2026 cuando se implemente role Supervisor completamente.
